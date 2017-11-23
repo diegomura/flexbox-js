@@ -5,6 +5,17 @@ class Node {
     this.parent = null;
     this.measure = null;
     this.children = [];
+
+    this.style = {
+      alignContent: null,
+      alignItems: null,
+      alignSelf: null,
+      aspectRatio: null,
+      border: {},
+      display: null,
+      flexBasis: null,
+      flexDirection: null,
+    };
   }
 
   calculateLayout(width, height, direction) {
@@ -24,31 +35,31 @@ class Node {
   }
 
   getAlignContent() {
-
+    return this.style.alignContent;
   }
 
   getAlignItems() {
-
+    return this.style.alignItems;
   }
 
   getAlignSelf() {
-
+    return this.style.alignSelf;
   }
 
   getAspectRatio() {
-
+    return this.style.alignSelf;
   }
 
   getBorder(edge) {
-
+    return this.style.border[edge];
   }
 
-  getChild() {
-
+  getChild(index) {
+    return this.children[index];
   }
 
   getChildCount() {
-
+    return this.children.length;
   }
 
   getComputedBorder(edge) {
@@ -92,15 +103,15 @@ class Node {
   }
 
   getDisplay() {
-
+    return this.style.display;
   }
 
   getFlexBasis() {
-
+    return this.style.flexBasis;
   }
 
   getFlexDirection() {
-
+    return this.style.flexDirection;
   }
 
   getFlexGrow() {
