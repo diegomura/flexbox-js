@@ -1,6 +1,7 @@
 class Value {
-  constructor() {
-
+  constructor(unit, value) {
+    this.unit = unit;
+    this.value = value;
   }
 
   fromJS() {

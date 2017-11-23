@@ -1,6 +1,7 @@
 class Size {
-  constructor() {
-
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
   }
 
   fromJS() {

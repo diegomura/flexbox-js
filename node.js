@@ -3,11 +3,11 @@ class Node {
     this.config = config;
   }
 
-  calculateLayout() {
+  calculateLayout(width, height, direction) {
 
   }
 
-  copyStyle() {
+  copyStyle(node) {
 
   }
 
@@ -35,7 +35,7 @@ class Node {
 
   }
 
-  getBorder() {
+  getBorder(edge) {
 
   }
 
@@ -47,7 +47,7 @@ class Node {
 
   }
 
-  getComputedBorder() {
+  getComputedBorder(edge) {
 
   }
 
@@ -67,11 +67,11 @@ class Node {
 
   }
 
-  getComputedMargin() {
+  getComputedMargin(edge) {
 
   }
 
-  getComputedPadding() {
+  getComputedPadding(edge) {
 
   }
 
@@ -119,7 +119,7 @@ class Node {
 
   }
 
-  getMargin() {
+  getMargin(edge) {
 
   }
 
@@ -143,7 +143,7 @@ class Node {
 
   }
 
-  getPadding() {
+  getPadding(edge) {
 
   }
 
@@ -151,7 +151,7 @@ class Node {
 
   }
 
-  getPosition() {
+  getPosition(edge) {
 
   }
 
@@ -163,7 +163,7 @@ class Node {
 
   }
 
-  insertChild() {
+  insertChild(child, index) {
 
   }
 
@@ -175,7 +175,7 @@ class Node {
 
   }
 
-  removeChild() {
+  removeChild(child) {
 
   }
 
@@ -183,59 +183,59 @@ class Node {
 
   }
 
-  setAlignContent() {
+  setAlignContent(alignContent) {
 
   }
 
-  setAlignItems() {
+  setAlignItems(alignItems) {
 
   }
 
-  setAlignSelf() {
+  setAlignSelf(alignSelf) {
 
   }
 
-  setAspectRatio() {
+  setAspectRatio(aspectRatio) {
 
   }
 
-  setBorder() {
+  setBorder(edge, border) {
 
   }
 
-  setDisplay() {
+  setDisplay(display) {
 
   }
 
-  setFlex() {
+  setFlex(flex) {
 
   }
 
-  setFlexBasis() {
+  setFlexBasis(flexBasis) {
 
   }
 
-  setFlexBasisPercent() {
+  setFlexBasisPercent(flexBasis) {
 
   }
 
-  setFlexDirection() {
+  setFlexDirection(flexDirection) {
 
   }
 
-  setFlexGrow() {
+  setFlexGrow(flexGrow) {
 
   }
 
-  setFlexShrink() {
+  setFlexShrink(flexShrink) {
 
   }
 
-  setFlexWrap() {
+  setFlexWrap(flexWrap) {
 
   }
 
-  setHeight() {
+  setHeight(height) {
 
   }
 
@@ -243,87 +243,87 @@ class Node {
 
   }
 
-  setHeightPercent() {
+  setHeightPercent(height) {
 
   }
 
-  setJustifyContent() {
+  setJustifyContent(justifyContent) {
 
   }
 
-  setMargin() {
+  setMargin(edge, margin) {
 
   }
 
-  setMarginAuto() {
+  setMarginAuto(edge) {
 
   }
 
-  setMarginPercent() {
+  setMarginPercent(edge, margin) {
 
   }
 
-  setMaxHeight() {
+  setMaxHeight(maxHeight) {
 
   }
 
-  setMaxHeightPercent() {
+  setMaxHeightPercent(maxHeight) {
 
   }
 
-  setMaxWidth() {
+  setMaxWidth(maxWidth) {
 
   }
 
-  setMaxWidthPercent() {
+  setMaxWidthPercent(maxWidth) {
 
   }
 
-  setMeasureFunc() {
+  setMeasureFunc(func) {
 
   }
 
-  setMinHeight() {
+  setMinHeight(minHeight) {
 
   }
 
-  setMinHeightPercent() {
+  setMinHeightPercent(minHeight) {
 
   }
 
-  setMinWidth() {
+  setMinWidth(minWidth) {
 
   }
 
-  setMinWidthPercent() {
+  setMinWidthPercent(minWidth) {
 
   }
 
-  setOverflow() {
+  setOverflow(overflow) {
 
   }
 
-  setPadding() {
+  setPadding(edge, padding) {
 
   }
 
-  setPaddingPercent() {
+  setPaddingPercent(edge, padding) {
 
   }
 
-  setPosition() {
+  setPosition(edge, position) {
 
   }
 
-  setPositionPercent() {
+  setPositionPercent(edge, position) {
 
   }
 
-  setPositionType() {
+  setPositionType(positionType) {
 
   }
 
-  setWidth() {
+  setWidth(width) {
 
   }
 
@@ -331,7 +331,7 @@ class Node {
 
   }
 
-  setWidthPercent() {
+  setWidthPercent(width) {
 
   }
 
