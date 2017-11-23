@@ -1,6 +1,10 @@
 class Node {
   constructor(config) {
     this.config = config;
+
+    this.parent = null;
+    this.measure = null;
+    this.children = [];
   }
 
   calculateLayout(width, height, direction) {
@@ -163,8 +167,19 @@ class Node {
 
   }
 
+  // TODO: index insertion
   insertChild(child, index) {
+    if (child.getParent()) {
+      console.log('Child already has a parent, it must be removed first.');
+      return;
+    }
 
+    if (child.measure) {
+      console.log('Cannot add child: Nodes with measure functions cannot have children.');
+      return;
+    }
+
+    this.children.push(child);
   }
 
   isDirty() {
