@@ -1,0 +1,10 @@
+{
+  "name": "flexbox-js",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Diego Muracciole <diegomuracciole@gmail.com>",
+  "scripts": {
+    "test": "node ./test.js"
+  },
+  "license": "MIT"
+}
