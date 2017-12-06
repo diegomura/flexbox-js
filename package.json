@@ -4,7 +4,13 @@
   "main": "src/index.js",
   "author": "Diego Muracciole <diegomuracciole@gmail.com>",
   "scripts": {
-    "test": "node ./test.js"
+    "start": "node ./test.js",
+    "test": "jest --watch"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^21.2.1",
+    "prettier": "^1.8.2",
+    "yoga-layout": "^1.6.0"
+  }
 }
