@@ -4,13 +4,9 @@ class Size {
     this.height = height;
   }
 
-  fromJS() {
+  fromJS() {}
 
-  }
-
-  toString() {
-
-  }
+  toString() {}
 }
 
 module.exports = Size;

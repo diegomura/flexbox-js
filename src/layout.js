@@ -4,12 +4,10 @@ const Value = require('./value');
 class Layout {
   constructor() {
     this.position = {};
-    this.dimensions = {
-      [Enums.DIMENSION_WIDTH]: new Value(),
-      [Enums.DIMENSION_HEIGHT]: new Value(),
-    },
     this.margin = {};
     this.border = {};
+    this.dimensions = {};
+    this.measuredDimensions = {};
     this.padding = {};
     this.direction = Enums.DIRECTION_INHERIT;
     this.computedFlexBasisGeneration = 0;
@@ -19,26 +17,14 @@ class Layout {
     this.lastParentDirection = this.direction - 1;
     this.nextCachedMeasurementsIndex = 0;
     this.cachedMeasurements = {};
-    this.measuredDimensions = {
-      [Enums.DIMENSION_WIDTH]: new Value(),
-      [Enums.DIMENSION_HEIGHT]: new Value(),
-    };
-    this.cachedLayout = null;
-    this.left = null;
-    this.right = null;
-    this.top = null;
-    this.bottom = null;
+    this.cachedLayout = {};
     this.width = null;
     this.height = null;
   }
 
-  fromJS() {
+  fromJS() {}
 
-  }
-
-  toString() {
-
-  }
+  toString() {}
 }
 
 module.exports = Layout;

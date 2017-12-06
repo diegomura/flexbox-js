@@ -1,7 +1,6 @@
 const Enums = require('./enums');
 const Value = require('./value');
 
-// TODO: Urgent refactor!!
 class Style {
   constructor() {
     this.direction = Enums.DIRECTION_INHERIT;
@@ -15,75 +14,22 @@ class Style {
     this.overflow = Enums.OVERFLOW_VISIBLE;
     this.display = Enums.DISPLAY_FLEX;
     this.flex = null;
-    this.flexGrow = null;
-    this.flexShrink = null;
+    this.flexGrow = 0;
+    this.flexShrink = 0;
     this.aspectRatio = null;
     this.flexBasis = new Value(Enums.UNIT_AUTO);
-    this.margin = {
-      [Enums.EDGE_LEFT]: new Value(),
-      [Enums.EDGE_TOP]: new Value(),
-      [Enums.EDGE_RIGHT]: new Value(),
-      [Enums.EDGE_BOTTOM]: new Value(),
-      [Enums.EDGE_START]: new Value(),
-      [Enums.EDGE_END]: new Value(),
-      [Enums.EDGE_HORIZONTAL]: new Value(),
-      [Enums.EDGE_VERTICAL]: new Value(),
-      [Enums.EDGE_ALL]: new Value(),
-    };
-    this.position = {
-      [Enums.EDGE_LEFT]: new Value(),
-      [Enums.EDGE_TOP]: new Value(),
-      [Enums.EDGE_RIGHT]: new Value(),
-      [Enums.EDGE_BOTTOM]: new Value(),
-      [Enums.EDGE_START]: new Value(),
-      [Enums.EDGE_END]: new Value(),
-      [Enums.EDGE_HORIZONTAL]: new Value(),
-      [Enums.EDGE_VERTICAL]: new Value(),
-      [Enums.EDGE_ALL]: new Value(),
-    };
-    this.padding = {
-      [Enums.EDGE_LEFT]: new Value(),
-      [Enums.EDGE_TOP]: new Value(),
-      [Enums.EDGE_RIGHT]: new Value(),
-      [Enums.EDGE_BOTTOM]: new Value(),
-      [Enums.EDGE_START]: new Value(),
-      [Enums.EDGE_END]: new Value(),
-      [Enums.EDGE_HORIZONTAL]: new Value(),
-      [Enums.EDGE_VERTICAL]: new Value(),
-      [Enums.EDGE_ALL]: new Value(),
-    };
-    this.border = {
-      [Enums.EDGE_LEFT]: new Value(),
-      [Enums.EDGE_TOP]: new Value(),
-      [Enums.EDGE_RIGHT]: new Value(),
-      [Enums.EDGE_BOTTOM]: new Value(),
-      [Enums.EDGE_START]: new Value(),
-      [Enums.EDGE_END]: new Value(),
-      [Enums.EDGE_HORIZONTAL]: new Value(),
-      [Enums.EDGE_VERTICAL]: new Value(),
-      [Enums.EDGE_ALL]: new Value(),
-    };
-    this.dimensions = {
-      [Enums.DIMENSION_WIDTH]: new Value(Enums.UNIT_AUTO),
-      [Enums.DIMENSION_HEIGHT]: new Value(Enums.UNIT_AUTO),
-    },
-    this.maxDimensions = {
-      [Enums.DIMENSION_WIDTH]: new Value(),
-      [Enums.DIMENSION_HEIGHT]: new Value(),
-    },
-    this.minDimensions = {
-      [Enums.DIMENSION_WIDTH]: new Value(),
-      [Enums.DIMENSION_HEIGHT]: new Value(),
-    }
+    this.margin = Value.defaultEdgeValues();
+    this.position = Value.defaultEdgeValues();
+    this.padding = Value.defaultEdgeValues();
+    this.border = Value.defaultEdgeValues();
+    this.dimensions = Value.defaultDimensionValues(Enums.UNIT_AUTO);
+    this.maxDimensions = Value.defaultDimensionValues();
+    this.minDimensions = Value.defaultDimensionValues();
   }
 
-  fromJS() {
+  fromJS() {}
 
-  }
-
-  toString() {
-
-  }
+  toString() {}
 }
 
 module.exports = Style;
