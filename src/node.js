@@ -55,6 +55,22 @@ const resolveFlexBasisPtr = (node) => {
   return new Value(Enums.UNIT_AUTO);
 }
 
+const alignItem = (node, child) => {
+  const align = child.style.alignSelf == Enums.ALIGN_AUTO ? node.style.alignItems : child.style.alignSelf;
+  if (align === Enums.ALIGN_BASELINE && flexDirectionIsColumn(node.style.flexDirection)) {
+    return Enums.ALIGN_FLEX_START;
+  }
+  return align;
+}
+
+const marginLeadingValue = (node, axis) => {
+  if (flexDirectionIsRow(axis) && node.style.margin[Enums.EDGE_START].unit !== Enums.UNIT_UNDEFINED) {
+    return node.style.margin[Enums.EDGE_START];
+  } else {
+    return node.style.margin[leading[axis]];
+  }
+}
+
 const constrainMaxSizeForMode = (
   node,
   axis,
