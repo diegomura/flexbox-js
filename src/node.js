@@ -32,6 +32,7 @@ const {
   resolveFlexGrow,
   resolveFlexDirection,
   flexDirectionCross,
+  isFlex,
 } = require('./flex');
 const { trailing, leading, dim, pos } = require('./constants');
 

@@ -56,6 +56,11 @@ const resolveFlexShrink = node => {
   return node.config.useWebDefaults ? 1 : 0;
 };
 
+const isFlex = (node) => {
+  return (node.style.positionType === Enums.POSITION_TYPE_RELATIVE &&
+          (resolveFlexGrow(node) !== 0 || resolveFlexShrink(node) !== 0));
+}
+
 module.exports = {
   flexDirectionIsRow,
   flexDirectionIsColumn,
@@ -63,4 +68,5 @@ module.exports = {
   resolveFlexDirection,
   resolveFlexGrow,
   resolveFlexShrink,
+  isFlex,
 };

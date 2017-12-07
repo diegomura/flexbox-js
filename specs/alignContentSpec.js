@@ -479,7 +479,7 @@ test('align_content_spacebetween', () => {
   const root = yoga.Node.create();
 
   root.setFlexDirection(yoga.FLEX_DIRECTION_ROW);
-  root.setAlignContent(YGAlignSpaceBetween);
+  root.setAlignContent(yoga.ALIGN_SPACE_BETWEEN);
   root.setFlexWrap(yoga.WRAP_WRAP);
   root.setWidth(130);
   root.setHeight(100);
@@ -1720,9 +1720,9 @@ test('align_content_stretch_is_not_overriding_align_items', () => {
   root.setAlignContent(yoga.ALIGN_STRETCH);
 
   const child0 = yoga.Node.create();
-  YGNodeStyleSetFlexDirection(child0, YGFlexDirectionRow);
+  child0.setFlexDirection(yoga.FLEX_DIRECTION_ROW);
   child0.setAlignContent(yoga.ALIGN_STRETCH);
-  YGNodeStyleSetAlignItems(child0, YGAlignCenter);
+  child0.setAlignItems(yoga.ALIGN_CENTER);
   child0.setWidth(100);
   child0.setHeight(100);
   root.insertChild(child0, 0);
