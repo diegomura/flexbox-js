@@ -79,6 +79,10 @@ const marginTrailingValue = (node, axis) => {
   }
 }
 
+const dimWithMargin = (node, axis, widthSize) => {
+  return node.layout.measuredDimensions[dim[axis]] + leadingMargin(node, axis, widthSize) + trailingMargin(node, axis, widthSize);
+}
+
 const constrainMaxSizeForMode = (
   node,
   axis,
@@ -1618,7 +1622,7 @@ const layoutImpl = (
             const alignItemValue = alignItem(node, child);
 
             if (
-              alignItemValue == YGAlignStretch &&
+              alignItemValue == Enums.ALIGN_STRETCH &&
               marginLeadingValue(child, crossAxis).unit !== Enums.UNIT_AUTO &&
               marginTrailingValue(child, crossAxis).unit !== Enums.UNIT_AUTO
             ) {
