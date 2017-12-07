@@ -55,6 +55,29 @@ const resolveFlexBasisPtr = (node) => {
   return new Value(Enums.UNIT_AUTO);
 }
 
+const constrainMaxSizeForMode = (
+  node,
+  axis,
+  parentAxisSize,
+  parentWidth,
+  mode,
+  size,
+) => {
+  const maxSize = Value.resolve(node.style.maxDimensions[dim[axis]], parentAxisSize) + marginForAxis(node, axis, parentWidth);
+  switch (mode) {
+    case Enums.MEASURE_MODE_EXACTLY:
+    case Enums.MEASURE_MODE_AT_MOST:
+      size = (floatIsUndefined(maxSize) || size < maxSize) ? size : maxSize;
+      break;
+    case Enums.MEASURE_MODE_UNDEFINED:
+      if (!floatIsUndefined(maxSize)) {
+        mode = Enums.MEASURE_MODE_AT_MOST;
+        size = maxSize;
+      }
+      break;
+  }
+}
+
 const computeFlexBasisForChild = (
   node,
   child,
@@ -153,7 +176,7 @@ const computeFlexBasisForChild = (
     // axis to be measured exactly with the available inner width
 
     const hasExactWidth = !floatIsUndefined(width) && widthMode === Enums.MEASURE_MODE_EXACTLY;
-    const childWidthStretch = nodeAlignItem(node, child) === Enums.ALIGN_STRETCH &&
+    const childWidthStretch = alignItem(node, child) === Enums.ALIGN_STRETCH &&
                                    childWidthMeasureMode != Enums.MEASURE_MODE_EXACTLY;
     if (!isMainAxisRow && !isRowStyleDimDefined && hasExactWidth && childWidthStretch) {
       childWidth = width;
@@ -165,7 +188,7 @@ const computeFlexBasisForChild = (
     }
 
     const hasExactHeight = !floatIsUndefined(height) && heightMode === Enums.MEASURE_MODE_EXACTLY;
-    const childHeightStretch = nodeAlignItem(node, child) === Enums.ALIGN_STRETCH &&
+    const childHeightStretch = alignItem(node, child) === Enums.ALIGN_STRETCH &&
                                     childHeightMeasureMode != Enums.MEASURE_MODE_EXACTLY;
     if (isMainAxisRow && !isColumnStyleDimDefined && hasExactHeight && childHeightStretch) {
       childHeight = height;
@@ -1568,10 +1591,10 @@ const layoutImpl = (
             }
           } else {
             let leadingCrossDim = leadingPaddingAndBorderCross;
-            const alignItem = alignItem(node, child);
+            const alignItemValue = alignItem(node, child);
 
             if (
-              alignItem == YGAlignStretch &&
+              alignItemValue == YGAlignStretch &&
               marginLeadingValue(child, crossAxis).unit !== Enums.UNIT_AUTO &&
               marginTrailingValue(child, crossAxis).unit !== Enums.UNIT_AUTO
             ) {
@@ -1661,9 +1684,9 @@ const layoutImpl = (
                 marginLeadingValue(child, crossAxis).unit == Enums.UNIT_AUTO
               ) {
                 leadingCrossDim += Math.max(0, remainingCrossDim);
-              } else if (alignItem == Enums.ALIGN_FLEX_START) {
+              } else if (alignItemValue == Enums.ALIGN_FLEX_START) {
                 // No-Op
-              } else if (alignItem == Enums.ALIGN_CENTER) {
+              } else if (alignItemValue == Enums.ALIGN_CENTER) {
                 leadingCrossDim += remainingCrossDim / 2;
               } else {
                 leadingCrossDim += remainingCrossDim;
