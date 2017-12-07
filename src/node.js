@@ -71,6 +71,14 @@ const marginLeadingValue = (node, axis) => {
   }
 }
 
+const marginTrailingValue = (node, axis) => {
+  if (flexDirectionIsRow(axis) && node.style.margin[Enums.EDGE_END].unit !== Enums.UNIT_UNDEFINED) {
+    return node.style.margin[Enums.EDGE_END];
+  } else {
+    return node.style.margin[trailing[axis]];
+  }
+}
+
 const constrainMaxSizeForMode = (
   node,
   axis,
@@ -397,7 +405,7 @@ const layoutNodeInternal = (
         newCacheEntry =
           node.layout.cachedMeasurements[
             node.layout.nextCachedMeasurementsIndex
-          ];
+          ] || {};
         node.layout.nextCachedMeasurementsIndex++;
       }
 

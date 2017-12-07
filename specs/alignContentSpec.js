@@ -290,7 +290,7 @@ test('align_content_flex_start_with_flex', () => {
 
 test('align_content_flex_end', () => {
   const root = yoga.Node.create();
-  root.setAlignContent(YGAlignFlexEnd);
+  root.setAlignContent(yoga.ALIGN_FLEX_END);
   root.setFlexWrap(yoga.WRAP_WRAP);
   root.setWidth(100);
   root.setHeight(100);
