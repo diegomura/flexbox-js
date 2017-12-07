@@ -1,4 +1,5 @@
 const Enums = require('./enums');
+const Value = require('./value');
 const { boundAxis } = require('./axis');
 const { marginForAxis } = require('./margins');
 const { paddingAndBorderForAxis } = require('./paddings');
@@ -10,7 +11,7 @@ const resolveDimensions = node => {
   // Resolve width
   if (
     maxDimensions[Enums.DIMENSION_WIDTH].unit !== Enums.UNIT_UNDEFINED &&
-    Value.equals(maxDimensions[Enums.DIMENSION_WIDTH], minDimensions[Enums.DIMENSION_WIDTH])
+    Value.equal(maxDimensions[Enums.DIMENSION_WIDTH], minDimensions[Enums.DIMENSION_WIDTH])
   ) {
     node.resolvedDimensions[Enums.DIMENSION_WIDTH] =
       maxDimensions[Enums.DIMENSION_WIDTH];
@@ -22,7 +23,7 @@ const resolveDimensions = node => {
   // Resolve height
   if (
     maxDimensions[Enums.DIMENSION_HEIGHT].unit !== Enums.UNIT_UNDEFINED &&
-    Value.equals(maxDimensions[Enums.DIMENSION_HEIGHT],  minDimensions[Enums.DIMENSION_HEIGHT])
+    Value.equal(maxDimensions[Enums.DIMENSION_HEIGHT],  minDimensions[Enums.DIMENSION_HEIGHT])
   ) {
     node.resolvedDimensions[Enums.DIMENSION_HEIGHT] =
       maxDimensions[Enums.DIMENSION_HEIGHT];

@@ -44,6 +44,168 @@ let gDepth = 0;
 let gCurrentGenerationCount = 0;
 const maxCachedResultCount = 16;
 
+const resolveFlexBasisPtr = (node) => {
+  if (node.style.flexBasis.unit !== Enums.UNIT_AUTO && node.style.flexBasis.unit !== Enums.UNIT_UNDEFINED) {
+    return node.style.flexBasis;
+  }
+  if (!floatIsUndefined(node.style.flex) && node.style.flex > 0.0) {
+    return node.config.useWebDefaults ? new Value(Enums.UNIT_AUTO) : Value.zero();
+  }
+  return new Value(Enums.UNIT_AUTO);
+}
+
+const computeFlexBasisForChild = (
+  node,
+  child,
+  width,
+  widthMode,
+  height,
+  parentWidth,
+  parentHeight,
+  heightMode,
+  direction,
+  config
+) => {
+  const mainAxis = resolveFlexDirection(node.style.flexDirection, direction);
+  const isMainAxisRow = flexDirectionIsRow(mainAxis);
+  const mainAxisSize = isMainAxisRow ? width : height;
+  const mainAxisParentSize = isMainAxisRow ? parentWidth : parentHeight;
+
+  let childWidth;
+  let childHeight;
+  let childWidthMeasureMode;
+  let childHeightMeasureMode;
+
+  const resolvedFlexBasis = Value.resolve(resolveFlexBasisPtr(child), mainAxisParentSize);
+  const isRowStyleDimDefined = isStyleDimDefined(child, Enums.FLEX_DIRECTION_ROW, parentWidth);
+  const isColumnStyleDimDefined = isStyleDimDefined(child, Enums.FLEX_DIRECTION_COLUMN, parentHeight);
+
+  if (!floatIsUndefined(resolvedFlexBasis) && !floatIsUndefined(mainAxisSize)) {
+    if (floatIsUndefined(child.layout.computedFlexBasis) ||
+        (configIsExperimentalFeatureEnabled(child.config, YGExperimentalFeatureWebFlexBasis) &&
+         child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)) {
+      child.layout.computedFlexBasis =
+          Math.max(resolvedFlexBasis, paddingAndBorderForAxis(child, mainAxis, parentWidth));
+    }
+  } else if (isMainAxisRow && isRowStyleDimDefined) {
+    // The width is definite, so use that as the flex basis.
+    child.layout.computedFlexBasis =
+        Math.max(Value.resolve(child.resolvedDimensions[Enums.DIMENSION_WIDTH], parentWidth),
+              paddingAndBorderForAxis(child, Enums.FLEX_DIRECTION_ROW, parentWidth));
+  } else if (!isMainAxisRow && isColumnStyleDimDefined) {
+    // The height is definite, so use that as the flex basis.
+    child.layout.computedFlexBasis =
+        Math.max(Value.resolve(child.resolvedDimensions[Enums.DIMENSION_HEIGHT], parentHeight),
+              paddingAndBorderForAxis(child, Enums.FLEX_DIRECTION_COLUMN, parentWidth));
+  } else {
+    // Compute the flex basis and hypothetical main size (i.e. the clamped
+    // flex basis).
+    childWidth = undefined;
+    childHeight = undefined;
+    childWidthMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
+    childHeightMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
+
+    const marginRow = marginForAxis(child, Enums.FLEX_DIRECTION_ROW, parentWidth);
+    const marginColumn = marginForAxis(child, Enums.FLEX_DIRECTION_COLUMN, parentWidth);
+
+    if (isRowStyleDimDefined) {
+      childWidth =
+          Value.resolve(child.resolvedDimensions[Enums.DIMENSION_WIDTH], parentWidth) + marginRow;
+      childWidthMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+    }
+    if (isColumnStyleDimDefined) {
+      childHeight =
+          Value.resolve(child.resolvedDimensions[Enums.DIMENSION_HEIGHT], parentHeight) + marginColumn;
+      childHeightMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+    }
+
+    // The W3C spec doesn't say anything about the 'overflow' property,
+    // but all major browsers appear to implement the following logic.
+    if ((!isMainAxisRow && node.style.overflow === Enums.OVERFLOW_SCROLL) ||
+        node.style.overflow != Enums.OVERFLOW_SCROLL) {
+      if (floatIsUndefined(childWidth) && !floatIsUndefined(width)) {
+        childWidth = width;
+        childWidthMeasureMode = Enums.MEASURE_MODE_AT_MOST;
+      }
+    }
+
+    if ((isMainAxisRow && node.style.overflow === Enums.OVERFLOW_SCROLL) ||
+        node.style.overflow != Enums.OVERFLOW_SCROLL) {
+      if (floatIsUndefined(childHeight) && !floatIsUndefined(height)) {
+        childHeight = height;
+        childHeightMeasureMode = Enums.MEASURE_MODE_AT_MOST;
+      }
+    }
+
+    if (!floatIsUndefined(child.style.aspectRatio)) {
+      if (!isMainAxisRow && childWidthMeasureMode === Enums.MEASURE_MODE_EXACTLY) {
+        childHeight = (childWidth - marginRow) / child.style.aspectRatio;
+        childHeightMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+      } else if (isMainAxisRow && childHeightMeasureMode === Enums.MEASURE_MODE_EXACTLY) {
+        childWidth = (childHeight - marginColumn) * child.style.aspectRatio;
+        childWidthMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+      }
+    }
+
+    // If child has no defined size in the cross axis and is set to stretch,
+    // set the cross
+    // axis to be measured exactly with the available inner width
+
+    const hasExactWidth = !floatIsUndefined(width) && widthMode === Enums.MEASURE_MODE_EXACTLY;
+    const childWidthStretch = nodeAlignItem(node, child) === Enums.ALIGN_STRETCH &&
+                                   childWidthMeasureMode != Enums.MEASURE_MODE_EXACTLY;
+    if (!isMainAxisRow && !isRowStyleDimDefined && hasExactWidth && childWidthStretch) {
+      childWidth = width;
+      childWidthMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+      if (!floatIsUndefined(child.style.aspectRatio)) {
+        childHeight = (childWidth - marginRow) / child.style.aspectRatio;
+        childHeightMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+      }
+    }
+
+    const hasExactHeight = !floatIsUndefined(height) && heightMode === Enums.MEASURE_MODE_EXACTLY;
+    const childHeightStretch = nodeAlignItem(node, child) === Enums.ALIGN_STRETCH &&
+                                    childHeightMeasureMode != Enums.MEASURE_MODE_EXACTLY;
+    if (isMainAxisRow && !isColumnStyleDimDefined && hasExactHeight && childHeightStretch) {
+      childHeight = height;
+      childHeightMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+
+      if (!floatIsUndefined(child.style.aspectRatio)) {
+        childWidth = (childHeight - marginColumn) * child.style.aspectRatio;
+        childWidthMeasureMode = Enums.MEASURE_MODE_EXACTLY;
+      }
+    }
+
+    constrainMaxSizeForMode(
+        child, Enums.FLEX_DIRECTION_ROW, parentWidth, parentWidth, childWidthMeasureMode, childWidth);
+    constrainMaxSizeForMode(child,
+                              Enums.FLEX_DIRECTION_COLUMN,
+                              parentHeight,
+                              parentWidth,
+                              childHeightMeasureMode,
+                              childHeight);
+
+    // Measure the child
+    layoutNodeInternal(child,
+                         childWidth,
+                         childHeight,
+                         direction,
+                         childWidthMeasureMode,
+                         childHeightMeasureMode,
+                         parentWidth,
+                         parentHeight,
+                         false,
+                         "measure",
+                         config);
+
+    child.layout.computedFlexBasis =
+        Math.max(child.layout.measuredDimensions[dim[mainAxis]],
+              paddingAndBorderForAxis(child, mainAxis, parentWidth));
+  }
+
+  child.layout.computedFlexBasisGeneration = gCurrentGenerationCount;
+}
+
 const layoutNodeInternal = (
   node,
   availableWidth,

@@ -1432,7 +1432,7 @@ test('align_content_stretch_row_with_max_height', () => {
 
   const child1 = yoga.Node.create();
   child1.setWidth(50);
-  YGNodeStyleSetMaxHeight(child1, 20);
+  child1.setMaxHeight(20);
   root.insertChild(child1, 1);
 
   const child2 = yoga.Node.create();
@@ -1526,7 +1526,7 @@ test('align_content_stretch_row_with_min_height', () => {
 
   const child1 = yoga.Node.create();
   child1.setWidth(50);
-  YGNodeStyleSetMinHeight(child1, 80);
+  child1.setMinHeight(80);
   root.insertChild(child1, 1);
 
   const child2 = yoga.Node.create();
