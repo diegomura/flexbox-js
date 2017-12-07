@@ -27,6 +27,18 @@ class Value {
     }
   }
 
+  static equal(a, b) {
+    if (a.unit !== b.unit) {
+      return false;
+    }
+
+    if (a.unit === Enums.UNIT_UNDEFINED) {
+      return true;
+    }
+
+    return Math.abs(a.value - b.value) < 0.0001;
+  }
+
   static defaultEdgeValues() {
     return [
       new Value(),

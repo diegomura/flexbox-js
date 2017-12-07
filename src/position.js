@@ -7,7 +7,7 @@ const {
 } = require('./flex');
 const { computedEdgeValue } = require('./edges');
 const { leadingMargin, trailingMargin } = require('./margins');
-const { leading, trailing } = require('./constants');
+const { dim, pos, leading, trailing } = require('./constants');
 
 const relativePosition = (node, axis, axisSize) => {
   return isLeadingPosDefined(node, axis)
@@ -94,9 +94,16 @@ const isTrailingPosDefined = (node, axis) =>
   computedEdgeValue(node.style.position, trailing[axis], Value.undefined())
     .unit !== Enums.UNIT_UNDEFINED;
 
+const setChildTrailingPosition = (node, child, axis) => {
+  const size = child.layout.measuredDimensions[dim[axis]];
+
+  child.layout.position[trailing[axis]] = node.layout.measuredDimensions[dim[axis]] - size - child.layout.position[pos[axis]];
+}
+
 module.exports = {
   setPosition,
   leadingPosition,
   isLeadingPosDefined,
   isTrailingPosDefined,
+  setChildTrailingPosition,
 };

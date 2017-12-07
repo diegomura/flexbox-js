@@ -9,9 +9,8 @@ const resolveDimensions = node => {
 
   // Resolve width
   if (
-    maxDimensions[Enums.DIMENSION_WIDTH].unit &&
-    maxDimensions[Enums.DIMENSION_WIDTH].value ===
-      minDimensions[Enums.DIMENSION_WIDTH].value
+    maxDimensions[Enums.DIMENSION_WIDTH].unit !== Enums.UNIT_UNDEFINED &&
+    Value.equals(maxDimensions[Enums.DIMENSION_WIDTH], minDimensions[Enums.DIMENSION_WIDTH])
   ) {
     node.resolvedDimensions[Enums.DIMENSION_WIDTH] =
       maxDimensions[Enums.DIMENSION_WIDTH];
@@ -22,9 +21,8 @@ const resolveDimensions = node => {
 
   // Resolve height
   if (
-    maxDimensions[Enums.DIMENSION_HEIGHT].unit &&
-    maxDimensions[Enums.DIMENSION_HEIGHT].value ===
-      minDimensions[Enums.DIMENSION_HEIGHT].value
+    maxDimensions[Enums.DIMENSION_HEIGHT].unit !== Enums.UNIT_UNDEFINED &&
+    Value.equals(maxDimensions[Enums.DIMENSION_HEIGHT],  minDimensions[Enums.DIMENSION_HEIGHT])
   ) {
     node.resolvedDimensions[Enums.DIMENSION_HEIGHT] =
       maxDimensions[Enums.DIMENSION_HEIGHT];

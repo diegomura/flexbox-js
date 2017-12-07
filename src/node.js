@@ -17,6 +17,7 @@ const {
   isLeadingPosDefined,
   leadingPosition,
   isTrailingPosDefined,
+  setChildTrailingPosition,
 } = require('./position');
 const { boundAxis } = require('./axis');
 const { computedEdgeValue } = require('./edges');
@@ -58,6 +59,7 @@ const layoutNodeInternal = (
 ) => {
   gDepth++;
 
+  const layout = node.layout;
   const needToVisitNode =
     (node.isDirty && node.layout.generationCount !== gCurrentGenerationCount) ||
     node.layout.lastParentDirection !== parentDirection;
@@ -1940,7 +1942,7 @@ class Node {
           this.resolvedDimensions[dim[Enums.FLEX_DIRECTION_ROW]],
           parentWidth,
         ) + marginForAxis(this, Enums.FLEX_DIRECTION_ROW, parentWidth);
-      widthMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
+      widthMeasureMode = Enums.MEASURE_MODE_EXACTLY;
     } else if (
       Value.resolve(
         this.style.maxDimensions[Enums.DIMENSION_WIDTH],
