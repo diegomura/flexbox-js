@@ -754,7 +754,8 @@ const layoutImpl = (
         child.layout.computedFlexBasisGeneration = gCurrentGenerationCount;
         child.layout.computedFlexBasis = 0;
       } else {
-        node._computeFlexBasisForChild(
+        computeFlexBasisForChild(
+          node,
           child,
           availableInnerWidth,
           widthMeasureMode,
