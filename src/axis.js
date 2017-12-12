@@ -10,11 +10,23 @@ const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   let max = undefined;
 
   if (flexDirectionIsColumn(axis)) {
-    min = Value.resolve(node.style.minDimensions[Enums.DIMENSION_HEIGHT], axisSize);
-    max = Value.resolve(node.style.maxDimensions[Enums.DIMENSION_HEIGHT], axisSize);
+    min = Value.resolve(
+      node.style.minDimensions[Enums.DIMENSION_HEIGHT],
+      axisSize,
+    );
+    max = Value.resolve(
+      node.style.maxDimensions[Enums.DIMENSION_HEIGHT],
+      axisSize,
+    );
   } else if (flexDirectionIsRow(axis)) {
-    min = Value.resolve(node.style.minDimensions[Enums.DIMENSION_WIDTH], axisSize);
-    max = Value.resolve(node.style.maxDimensions[Enums.DIMENSION_WIDTH], axisSize);
+    min = Value.resolve(
+      node.style.minDimensions[Enums.DIMENSION_WIDTH],
+      axisSize,
+    );
+    max = Value.resolve(
+      node.style.maxDimensions[Enums.DIMENSION_WIDTH],
+      axisSize,
+    );
   }
 
   let boundValue = value;
@@ -28,12 +40,15 @@ const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   }
 
   return boundValue;
-}
+};
 
 // ✅
 const boundAxis = (node, axis, value, axisSize, widthSize) => {
-  return Math.max(boundAxisWithinMinAndMax(node, axis, value, axisSize), paddingAndBorderForAxis(node, axis, widthSize));
-}
+  return Math.max(
+    boundAxisWithinMinAndMax(node, axis, value, axisSize),
+    paddingAndBorderForAxis(node, axis, widthSize),
+  );
+};
 
 module.exports = {
   boundAxisWithinMinAndMax,

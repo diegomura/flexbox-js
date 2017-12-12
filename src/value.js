@@ -13,6 +13,10 @@ class Value {
     return new Value(Enums.UNIT_UNDEFINED, undefined);
   }
 
+  static auto() {
+    return new Value(Enums.UNIT_AUTO, undefined);
+  }
+
   static resolve(value, parentSize) {
     switch (value.unit) {
       case Enums.UNIT_UNDEFINED:
