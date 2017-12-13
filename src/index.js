@@ -12,5 +12,5 @@ module.exports = Object.assign(
     Value: value,
     Layout: layout,
   },
-  enums,
+  enums
 );

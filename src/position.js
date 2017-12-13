@@ -125,6 +125,7 @@ const setChildTrailingPosition = (node, child, axis) => {
 module.exports = {
   setPosition,
   leadingPosition,
+  trailingPosition,
   isLeadingPosDefined,
   isTrailingPosDefined,
   setChildTrailingPosition,

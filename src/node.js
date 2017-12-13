@@ -2,7 +2,7 @@ const Layout = require('./layout');
 const Style = require('./style');
 const Value = require('./value');
 const Enums = require('./enums');
-const { floatsEqual, floatIsUndefined, listCount } = require('./utils');
+const { floatsEqual, floatIsUndefined, listCount, max, min } = require('./utils');
 const { marginForAxis, leadingMargin, trailingMargin } = require('./margins');
 const { leadingBorder, trailingBorder } = require('./borders');
 const {
@@ -16,6 +16,7 @@ const {
   setPosition,
   isLeadingPosDefined,
   leadingPosition,
+  trailingPosition,
   isTrailingPosDefined,
   setChildTrailingPosition,
 } = require('./position');
@@ -108,27 +109,41 @@ const dimWithMargin = (node, axis, widthSize) => {
   );
 };
 
-// static void constrainMaxSizeForMode(const YGNodeRef node,
-//                                       const enum YGFlexDirection axis,
-//                                       const float parentAxisSize,
-//                                       const float parentWidth,
-//                                       YGMeasureMode *mode,
-//                                       float *size) {
-//   const float maxSize = Value.resolve(node.style.maxDimensions[dim[axis]], parentAxisSize) +
-//                         marginForAxis(node, axis, parentWidth);
-//   switch (*mode) {
-//     case Enums.MEASURE_MODE_EXACTLY:
-//     case Enums.MEASURE_MODE_AT_MOST:
-//       *size = (floatIsUndefined(maxSize) || *size < maxSize) ? *size : maxSize;
-//       break;
-//     case Enums.MEASURE_MODE_UNDEFINED:
-//       if (!floatIsUndefined(maxSize)) {
-//         *mode = Enums.MEASURE_MODE_AT_MOST;
-//         *size = maxSize;
-//       }
-//       break;
-//   }
-// }
+const isLayoutDimDefined = (node, axis) => {
+  const value = node.layout.measuredDimensions[dim[axis]];
+  return !floatIsUndefined(value) && value >= 0.0;
+}
+
+const constrainMaxSizeForMode = (
+  node,
+  axis,
+  parentAxisSize,
+  parentWidth,
+  mode,
+  size,
+) => {
+  const maxSize =
+    Value.resolve(node.style.maxDimensions[dim[axis]], parentAxisSize) +
+    marginForAxis(node, axis, parentWidth);
+  switch (mode) {
+    case Enums.MEASURE_MODE_EXACTLY:
+    case Enums.MEASURE_MODE_AT_MOST:
+      return {
+        mode,
+        size: floatIsUndefined(maxSize) || size < maxSize ? size : maxSize,
+      };
+    case Enums.MEASURE_MODE_UNDEFINED:
+      if (!floatIsUndefined(maxSize)) {
+        return {
+          mode: Enums.MEASURE_MODE_AT_MOST,
+          size: maxSize,
+        };
+      }
+      break;
+  }
+
+  return { mode, size };
+};
 
 // ✅
 const computeFlexBasisForChild = (
@@ -177,14 +192,14 @@ const computeFlexBasisForChild = (
       ) &&
         child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)
     ) {
-      child.layout.computedFlexBasis = Math.max(
+      child.layout.computedFlexBasis = max(
         resolvedFlexBasis,
         paddingAndBorderForAxis(child, mainAxis, parentWidth),
       );
     }
   } else if (isMainAxisRow && isRowStyleDimDefined) {
     // The width is definite, so use that as the flex basis.
-    child.layout.computedFlexBasis = Math.max(
+    child.layout.computedFlexBasis = max(
       Value.resolve(
         child.resolvedDimensions[Enums.DIMENSION_WIDTH],
         parentWidth,
@@ -193,7 +208,7 @@ const computeFlexBasisForChild = (
     );
   } else if (!isMainAxisRow && isColumnStyleDimDefined) {
     // The height is definite, so use that as the flex basis.
-    child.layout.computedFlexBasis = Math.max(
+    child.layout.computedFlexBasis = max(
       Value.resolve(
         child.resolvedDimensions[Enums.DIMENSION_HEIGHT],
         parentHeight,
@@ -317,7 +332,7 @@ const computeFlexBasisForChild = (
       }
     }
 
-    constrainMaxSizeForMode(
+    const rowConstrains = constrainMaxSizeForMode(
       child,
       Enums.FLEX_DIRECTION_ROW,
       parentWidth,
@@ -325,7 +340,11 @@ const computeFlexBasisForChild = (
       childWidthMeasureMode,
       childWidth,
     );
-    constrainMaxSizeForMode(
+
+    childWidthMeasureMode = rowConstrains.mode;
+    childWidth = rowConstrains.size;
+
+    const columnConstrains = constrainMaxSizeForMode(
       child,
       Enums.FLEX_DIRECTION_COLUMN,
       parentHeight,
@@ -333,6 +352,9 @@ const computeFlexBasisForChild = (
       childHeightMeasureMode,
       childHeight,
     );
+
+    childHeightMeasureMode = columnConstrains.mode;
+    childHeight = columnConstrains.size;
 
     // Measure the child
     layoutNodeInternal(
@@ -349,7 +371,7 @@ const computeFlexBasisForChild = (
       config,
     );
 
-    child.layout.computedFlexBasis = Math.max(
+    child.layout.computedFlexBasis = max(
       child.layout.measuredDimensions[dim[mainAxis]],
       paddingAndBorderForAxis(child, mainAxis, parentWidth),
     );
@@ -372,37 +394,23 @@ const layoutNodeInternal = (
   reason, //TODO: Check. Was * reason
   config,
 ) => {
-  const layout = node.layout;
-
   gDepth++;
 
   const needToVisitNode =
-    (node.isDirty && layout.generationCount !== gCurrentGenerationCount) ||
-    layout.lastParentDirection !== parentDirection;
+    (node.isDirty && node.layout.generationCount !== gCurrentGenerationCount) ||
+    node.layout.lastParentDirection !== parentDirection;
 
   if (needToVisitNode) {
     // Invalidate the cached results.
-    layout.nextCachedMeasurementsIndex = 0;
-    layout.cachedLayout.widthMeasureMode = -1;
-    layout.cachedLayout.heightMeasureMode = -1;
-    layout.cachedLayout.computedWidth = -1;
-    layout.cachedLayout.computedHeight = -1;
+    node.layout.nextCachedMeasurementsIndex = 0;
+    node.layout.cachedLayout.widthMeasureMode = -1;
+    node.layout.cachedLayout.heightMeasureMode = -1;
+    node.layout.cachedLayout.computedWidth = -1;
+    node.layout.cachedLayout.computedHeight = -1;
   }
 
   let cachedResults = null;
 
-  // Determine whether the results are already cached. We maintain a separate
-  // cache for layouts and measurements. A layout operation modifies the
-  // positions
-  // and dimensions for nodes in the subtree. The algorithm assumes that each
-  // node
-  // gets layed out a maximum of one time per tree layout, but multiple
-  // measurements
-  // may be required to resolve all of the flex dimensions.
-  // We handle nodes with measure functions specially here because they are the
-  // most
-  // expensive to measure, so it's worth avoiding redundant measurements if at
-  // all possible.
   if (node.measure) {
     const marginAxisRow = marginForAxis(
       node,
@@ -415,83 +423,85 @@ const layoutNodeInternal = (
       parentWidth,
     );
 
-    // First, try to use the layout cache.
+    // First, try to use the node.layout cache.
     if (
       canUseCachedMeasurement(
         widthMeasureMode,
         availableWidth,
         heightMeasureMode,
         availableHeight,
-        layout.cachedLayout.widthMeasureMode,
-        layout.cachedLayout.availableWidth,
-        layout.cachedLayout.heightMeasureMode,
-        layout.cachedLayout.availableHeight,
-        layout.cachedLayout.computedWidth,
-        layout.cachedLayout.computedHeight,
+        node.layout.cachedLayout.widthMeasureMode,
+        node.layout.cachedLayout.availableWidth,
+        node.layout.cachedLayout.heightMeasureMode,
+        node.layout.cachedLayout.availableHeight,
+        node.layout.cachedLayout.computedWidth,
+        node.layout.cachedLayout.computedHeight,
         marginAxisRow,
         marginAxisColumn,
         config,
       )
     ) {
-      cachedResults = layout.cachedLayout;
+      cachedResults = node.layout.cachedLayout;
     } else {
       // Try to use the measurement cache.
-      for (let i = 0; i < layout.nextCachedMeasurementsIndex; i++) {
+      for (let i = 0; i < node.layout.nextCachedMeasurementsIndex; i++) {
         if (
           canUseCachedMeasurement(
             widthMeasureMode,
             availableWidth,
             heightMeasureMode,
             availableHeight,
-            layout.cachedMeasurements[i].widthMeasureMode,
-            layout.cachedMeasurements[i].availableWidth,
-            layout.cachedMeasurements[i].heightMeasureMode,
-            layout.cachedMeasurements[i].availableHeight,
-            layout.cachedMeasurements[i].computedWidth,
-            layout.cachedMeasurements[i].computedHeight,
+            node.layout.cachedMeasurements[i].widthMeasureMode,
+            node.layout.cachedMeasurements[i].availableWidth,
+            node.layout.cachedMeasurements[i].heightMeasureMode,
+            node.layout.cachedMeasurements[i].availableHeight,
+            node.layout.cachedMeasurements[i].computedWidth,
+            node.layout.cachedMeasurements[i].computedHeight,
             marginAxisRow,
             marginAxisColumn,
             config,
           )
         ) {
-          cachedResults = layout.cachedMeasurements[i];
+          cachedResults = node.layout.cachedMeasurements[i];
           break;
         }
       }
     }
   } else if (performLayout) {
     if (
-      floatsEqual(layout.cachedLayout.availableWidth, availableWidth) &&
-      floatsEqual(layout.cachedLayout.availableHeight, availableHeight) &&
-      layout.cachedLayout.widthMeasureMode === widthMeasureMode &&
-      layout.cachedLayout.heightMeasureMode === heightMeasureMode
+      floatsEqual(node.layout.cachedLayout.availableWidth, availableWidth) &&
+      floatsEqual(node.layout.cachedLayout.availableHeight, availableHeight) &&
+      node.layout.cachedLayout.widthMeasureMode === widthMeasureMode &&
+      node.layout.cachedLayout.heightMeasureMode === heightMeasureMode
     ) {
-      cachedResults = layout.cachedLayout;
+      cachedResults = node.layout.cachedLayout;
     }
   } else {
-    for (let i = 0; i < layout.nextCachedMeasurementsIndex; i++) {
+    for (let i = 0; i < node.layout.nextCachedMeasurementsIndex; i++) {
       if (
         floatsEqual(
-          layout.cachedMeasurements[i].availableWidth,
+          node.layout.cachedMeasurements[i].availableWidth,
           availableWidth,
         ) &&
         floatsEqual(
-          layout.cachedMeasurements[i].availableHeight,
+          node.layout.cachedMeasurements[i].availableHeight,
           availableHeight,
         ) &&
-        layout.cachedMeasurements[i].widthMeasureMode === widthMeasureMode &&
-        layout.cachedMeasurements[i].heightMeasureMode === heightMeasureMode
+        node.layout.cachedMeasurements[i].widthMeasureMode ===
+          widthMeasureMode &&
+        node.layout.cachedMeasurements[i].heightMeasureMode ===
+          heightMeasureMode
       ) {
-        cachedResults = layout.cachedMeasurements[i];
+        cachedResults = node.layout.cachedMeasurements[i];
         break;
       }
     }
   }
 
   if (!needToVisitNode && cachedResults !== null) {
-    layout.measuredDimensions[Enums.DIMENSION_WIDTH] =
+    node.layout.measuredDimensions[Enums.DIMENSION_WIDTH] =
       cachedResults.computedWidth;
-    layout.measuredDimensions[Enums.DIMENSION_HEIGHT] =
+    node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT] =
       cachedResults.computedHeight;
   } else {
     layoutImpl(
@@ -507,22 +517,26 @@ const layoutNodeInternal = (
       config,
     );
 
-    layout.lastParentDirection = parentDirection;
+    node.layout.lastParentDirection = parentDirection;
 
     if (cachedResults === null) {
-      if (layout.nextCachedMeasurementsIndex === YG_MAX_CACHED_RESULT_COUNT) {
-        layout.nextCachedMeasurementsIndex = 0;
+      if (
+        node.layout.nextCachedMeasurementsIndex === YG_MAX_CACHED_RESULT_COUNT
+      ) {
+        node.layout.nextCachedMeasurementsIndex = 0;
       }
 
-      let newCacheEntry;
+      let newCacheEntry = {};
       if (performLayout) {
-        // Use the single layout cache entry.
-        newCacheEntry = layout.cachedLayout;
+        // Use the single node.layout cache entry.
+        newCacheEntry = node.layout.cachedLayout;
       } else {
         // Allocate a new measurement cache entry.
         newCacheEntry =
-          layout.cachedMeasurements[layout.nextCachedMeasurementsIndex];
-        layout.nextCachedMeasurementsIndex++;
+          node.layout.cachedMeasurements[
+            node.layout.nextCachedMeasurementsIndex
+          ];
+        node.layout.nextCachedMeasurementsIndex++;
       }
 
       newCacheEntry.availableWidth = availableWidth;
@@ -530,9 +544,9 @@ const layoutNodeInternal = (
       newCacheEntry.widthMeasureMode = widthMeasureMode;
       newCacheEntry.heightMeasureMode = heightMeasureMode;
       newCacheEntry.computedWidth =
-        layout.measuredDimensions[Enums.DIMENSION_WIDTH];
+        node.layout.measuredDimensions[Enums.DIMENSION_WIDTH];
       newCacheEntry.computedHeight =
-        layout.measuredDimensions[Enums.DIMENSION_HEIGHT];
+        node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT];
     }
   }
 
@@ -546,7 +560,7 @@ const layoutNodeInternal = (
   }
 
   gDepth--;
-  layout.generationCount = gCurrentGenerationCount;
+  node.layout.generationCount = gCurrentGenerationCount;
   return needToVisitNode || cachedResults === null;
 };
 
@@ -589,13 +603,14 @@ const absoluteLayoutChild = (
   widthMode,
   height,
   direction,
+  config,
 ) => {
   const mainAxis = resolveFlexDirection(node.style.flexDirection, direction);
-  const crossAxis = llexDirectionCross(mainAxis, direction);
+  const crossAxis = flexDirectionCross(mainAxis, direction);
   const isMainAxisRow = flexDirectionIsRow(mainAxis);
 
-  let childWidth = undefined;
-  let childHeight = undefined;
+  let childWidth = NaN;
+  let childHeight = NaN;
   let childWidthMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
   let childHeightMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
 
@@ -792,8 +807,8 @@ const layoutImpl = (
   parentDirection,
   widthMeasureMode,
   heightMeasureMode,
-  parentWidth,
-  parentHeight,
+  parentWidth = NaN,
+  parentHeight = NaN,
   performLayout,
   config,
 ) => {
@@ -1002,8 +1017,8 @@ const layoutImpl = (
     availableWidth - marginAxisRow - paddingAndBorderAxisRow;
   if (!floatIsUndefined(availableInnerWidth)) {
     // We want to make sure our available width does not violate min and max constraints
-    availableInnerWidth = Math.max(
-      Math.min(availableInnerWidth, maxInnerWidth),
+    availableInnerWidth = max(
+      min(availableInnerWidth, maxInnerWidth),
       minInnerWidth,
     );
   }
@@ -1012,8 +1027,8 @@ const layoutImpl = (
     availableHeight - marginAxisColumn - paddingAndBorderAxisColumn;
   if (!floatIsUndefined(availableInnerHeight)) {
     // We want to make sure our available height does not violate min and max constraints
-    availableInnerHeight = Math.max(
-      Math.min(availableInnerHeight, maxInnerHeight),
+    availableInnerHeight = max(
+      min(availableInnerHeight, maxInnerHeight),
       minInnerHeight,
     );
   }
@@ -1175,14 +1190,14 @@ const layoutImpl = (
           mainAxis,
           availableInnerWidth,
         );
-        const flexBasisWithMaxConstraints = Math.min(
+        const flexBasisWithMaxConstraints = min(
           Value.resolve(
             child.style.maxDimensions[dim[mainAxis]],
             mainAxisParentSize,
           ),
           child.layout.computedFlexBasis,
         );
-        const flexBasisWithMinAndMaxConstraints = Math.max(
+        const flexBasisWithMinAndMaxConstraints = max(
           Value.resolve(
             child.style.minDimensions[dim[mainAxis]],
             mainAxisParentSize,
@@ -1331,12 +1346,12 @@ const layoutImpl = (
       let deltaFlexGrowFactors = 0;
       currentRelativeChild = firstRelativeChild;
       while (currentRelativeChild !== null) {
-        childFlexBasis = Math.min(
+        childFlexBasis = min(
           Value.resolve(
             currentRelativeChild.style.maxDimensions[dim[mainAxis]],
             mainAxisParentSize,
           ),
-          Math.max(
+          max(
             Value.resolve(
               currentRelativeChild.style.minDimensions[dim[mainAxis]],
               mainAxisParentSize,
@@ -1414,12 +1429,12 @@ const layoutImpl = (
       deltaFreeSpace = 0;
       currentRelativeChild = firstRelativeChild;
       while (currentRelativeChild !== null) {
-        childFlexBasis = Math.min(
+        childFlexBasis = min(
           Value.resolve(
             currentRelativeChild.style.maxDimensions[dim[mainAxis]],
             mainAxisParentSize,
           ),
-          Math.max(
+          max(
             Value.resolve(
               currentRelativeChild.style.minDimensions[dim[mainAxis]],
               mainAxisParentSize,
@@ -1541,7 +1556,7 @@ const layoutImpl = (
               : Enums.MEASURE_MODE_EXACTLY;
         }
 
-        constrainMaxSizeForMode(
+        const mainAxisConstrains = constrainMaxSizeForMode(
           currentRelativeChild,
           mainAxis,
           availableInnerMainDim,
@@ -1549,7 +1564,11 @@ const layoutImpl = (
           childMainMeasureMode,
           childMainSize,
         );
-        constrainMaxSizeForMode(
+
+        childMainMeasureMode = mainAxisConstrains.mode;
+        childMainSize = mainAxisConstrains.size;
+
+        const crossAxisConstrains = constrainMaxSizeForMode(
           currentRelativeChild,
           crossAxis,
           availableInnerCrossDim,
@@ -1557,6 +1576,9 @@ const layoutImpl = (
           childCrossMeasureMode,
           childCrossSize,
         );
+
+        childCrossMeasureMode = crossAxisConstrains.mode;
+        childCrossSize = crossAxisConstrains.size;
 
         const requiresStretchLayout =
           !isStyleDimDefined(
@@ -1627,7 +1649,7 @@ const layoutImpl = (
           mainAxisParentSize,
         ) >= 0
       ) {
-        remainingFreeSpace = Math.max(
+        remainingFreeSpace = max(
           0,
           Value.resolve(
             node.style.minDimensions[dim[mainAxis]],
@@ -1664,7 +1686,7 @@ const layoutImpl = (
         case Enums.JUSTIFY_SPACE_BETWEEN:
           if (itemsOnLine > 1) {
             betweenMainDim =
-              Math.max(remainingFreeSpace, 0) / (itemsOnLine - 1);
+              max(remainingFreeSpace, 0) / (itemsOnLine - 1);
           } else {
             betweenMainDim = 0;
           }
@@ -1685,6 +1707,7 @@ const layoutImpl = (
     }
 
     let mainDim = leadingPaddingAndBorderMain + leadingMainDim;
+
     let crossDim = 0;
 
     for (let i = startOfLineIndex; i < endOfLineIndex; i++) {
@@ -1739,7 +1762,7 @@ const layoutImpl = (
 
             // The cross dimension is the max of the elements dimension since
             // there can only be one element in that cross dimension.
-            crossDim = Math.max(
+            crossDim = max(
               crossDim,
               dimWithMargin(child, crossAxis, availableInnerWidth),
             );
@@ -1822,14 +1845,14 @@ const layoutImpl = (
           // For a relative children, we're either using alignItems (parent) or
           // alignSelf (child) in order to determine the position in the cross
           // axis
-          const alignItem = alignItem(node, child);
+          const itemAlignment = alignItem(node, child);
 
           // If the child uses align stretch, we need to lay it out one more
           // time, this time
           // forcing the cross-axis size to be the computed cross size for the
           // current line.
           if (
-            alignItem === Enums.ALIGN_STRETCH &&
+            itemAlignment === Enums.ALIGN_STRETCH &&
             marginLeadingValue(child, crossAxis).unit !== Enums.UNIT_AUTO &&
             marginTrailingValue(child, crossAxis).unit !== Enums.UNIT_AUTO
           ) {
@@ -1853,7 +1876,7 @@ const layoutImpl = (
 
               let childMainMeasureMode = Enums.MEASURE_MODE_EXACTLY;
               let childCrossMeasureMode = Enums.MEASURE_MODE_EXACTLY;
-              constrainMaxSizeForMode(
+              const mainAxisConstrains = constrainMaxSizeForMode(
                 child,
                 mainAxis,
                 availableInnerMainDim,
@@ -1861,7 +1884,11 @@ const layoutImpl = (
                 childMainMeasureMode,
                 childMainSize,
               );
-              constrainMaxSizeForMode(
+
+              childMainMeasureMode = mainAxisConstrains.mode;
+              childMainSize = mainAxisConstrains.size;
+
+              const crossAxisConstrains = constrainMaxSizeForMode(
                 child,
                 crossAxis,
                 availableInnerCrossDim,
@@ -1869,6 +1896,9 @@ const layoutImpl = (
                 childCrossMeasureMode,
                 childCrossSize,
               );
+
+              childCrossMeasureMode = crossAxisConstrains.mode;
+              childCrossSize = crossAxisConstrains.size;
 
               const childWidth = isMainAxisRow ? childMainSize : childCrossSize;
               const childHeight = !isMainAxisRow
@@ -1905,7 +1935,7 @@ const layoutImpl = (
               marginLeadingValue(child, crossAxis).unit === Enums.UNIT_AUTO &&
               marginTrailingValue(child, crossAxis).unit === Enums.UNIT_AUTO
             ) {
-              leadingCrossDim += Math.max(0.0, remainingCrossDim / 2);
+              leadingCrossDim += max(0.0, remainingCrossDim / 2);
             } else if (
               marginTrailingValue(child, crossAxis).unit === Enums.UNIT_AUTO
             ) {
@@ -1913,10 +1943,10 @@ const layoutImpl = (
             } else if (
               marginLeadingValue(child, crossAxis).unit === Enums.UNIT_AUTO
             ) {
-              leadingCrossDim += Math.max(0.0, remainingCrossDim);
-            } else if (alignItem === Enums.ALIGN_FLEX_START) {
+              leadingCrossDim += max(0.0, remainingCrossDim);
+            } else if (itemAlignment === Enums.ALIGN_FLEX_START) {
               // No-Op
-            } else if (alignItem === Enums.ALIGN_CENTER) {
+            } else if (itemAlignment === Enums.ALIGN_CENTER) {
               leadingCrossDim += remainingCrossDim / 2;
             } else {
               leadingCrossDim += remainingCrossDim;
@@ -1930,7 +1960,7 @@ const layoutImpl = (
     }
 
     totalLineCrossDim += crossDim;
-    maxLineMainDim = Math.max(maxLineMainDim, mainDim);
+    maxLineMainDim = max(maxLineMainDim, mainDim);
   }
 
   // STEP 8: MULTI-LINE CONTENT ALIGNMENT
@@ -1987,7 +2017,7 @@ const layoutImpl = (
       let maxAscentForCurrentLine = 0;
       let maxDescentForCurrentLine = 0;
       for (ii = startIndex; ii < childCount; ii++) {
-        const child = listGet(node.children, ii);
+        const child = node.children[ii];
         if (child.style.display === Enums.DISPLAY_NONE) {
           continue;
         }
@@ -1996,7 +2026,7 @@ const layoutImpl = (
             break;
           }
           if (isLayoutDimDefined(child, crossAxis)) {
-            lineHeight = Math.max(
+            lineHeight = max(
               lineHeight,
               child.layout.measuredDimensions[dim[crossAxis]] +
                 marginForAxis(child, crossAxis, availableInnerWidth),
@@ -2018,12 +2048,12 @@ const layoutImpl = (
                 availableInnerWidth,
               ) -
               ascent;
-            maxAscentForCurrentLine = Math.max(maxAscentForCurrentLine, ascent);
-            maxDescentForCurrentLine = Math.max(
+            maxAscentForCurrentLine = max(maxAscentForCurrentLine, ascent);
+            maxDescentForCurrentLine = max(
               maxDescentForCurrentLine,
               descent,
             );
-            lineHeight = Math.max(
+            lineHeight = max(
               lineHeight,
               maxAscentForCurrentLine + maxDescentForCurrentLine,
             );
@@ -2035,7 +2065,7 @@ const layoutImpl = (
 
       if (performLayout) {
         for (ii = startIndex; ii < endIndex; ii++) {
-          const child = listGet(node.children, ii);
+          const child = node.children[ii];
           if (child.style.display === Enums.DISPLAY_NONE) {
             continue;
           }
@@ -2172,8 +2202,8 @@ const layoutImpl = (
     measureModeMainDim === Enums.MEASURE_MODE_AT_MOST &&
     node.style.overflow === Enums.OVERFLOW_SCROLL
   ) {
-    node.layout.measuredDimensions[dim[mainAxis]] = Math.max(
-      Math.min(
+    node.layout.measuredDimensions[dim[mainAxis]] = max(
+      min(
         availableInnerMainDim + paddingAndBorderAxisMain,
         boundAxisWithinMinAndMax(
           node,
@@ -2204,8 +2234,8 @@ const layoutImpl = (
     measureModeCrossDim === Enums.MEASURE_MODE_AT_MOST &&
     node.style.overflow === Enums.OVERFLOW_SCROLL
   ) {
-    node.layout.measuredDimensions[dim[crossAxis]] = Math.max(
-      Math.min(
+    node.layout.measuredDimensions[dim[crossAxis]] = max(
+      min(
         availableInnerCrossDim + paddingAndBorderAxisCross,
         boundAxisWithinMinAndMax(
           node,
@@ -2287,6 +2317,34 @@ const markDirtyInternal = node => {
   }
 };
 
+const roundValueToPixelGrid = (
+  value,
+  pointScaleFactor,
+  forceCeil,
+  forceFloor,
+) => {
+  let scaledValue = value * pointScaleFactor;
+  let fractial = scaledValue % 1.0;
+  if (floatsEqual(fractial, 0)) {
+    // First we check if the value is already rounded
+    scaledValue = scaledValue - fractial;
+  } else if (floatsEqual(fractial, 1.0)) {
+    scaledValue = scaledValue - fractial + 1.0;
+  } else if (forceCeil) {
+    // Next we check if we need to use forced rounding
+    scaledValue = scaledValue - fractial + 1.0;
+  } else if (forceFloor) {
+    scaledValue = scaledValue - fractial;
+  } else {
+    // Finally we just round the value
+    scaledValue =
+      scaledValue -
+      fractial +
+      (fractial > 0.5 || floatsEqual(fractial, 0.5) ? 1.0 : 0.0);
+  }
+  return scaledValue / pointScaleFactor;
+};
+
 // ✅
 const roundToPixelGrid = (
   node,
@@ -2314,6 +2372,7 @@ const roundToPixelGrid = (
   // lead to unwanted text truncation.
   const textRounding = node.nodeType === NODE_TYPE.TEXT;
 
+  debugger
   node.layout.position[Enums.EDGE_LEFT] = roundValueToPixelGrid(
     nodeLeft,
     pointScaleFactor,
@@ -2331,11 +2390,11 @@ const roundToPixelGrid = (
   // have any fraction
   // To verify if the result is close to whole number we want to check both floor and ceil numbers
   const hasFractionalWidth =
-    !floatsEqual(Math.mod(nodeWidth * pointScaleFactor, 1.0), 0) &&
-    !floatsEqual(Math.mod(nodeWidth * pointScaleFactor, 1.0), 1.0);
+    !floatsEqual((nodeWidth * pointScaleFactor) % 1.0, 0) &&
+    !floatsEqual((nodeWidth * pointScaleFactor) % 1.0, 1.0);
   const hasFractionalHeight =
-    !floatsEqual(Math.mod(nodeHeight * pointScaleFactor, 1.0), 0) &&
-    !floatsEqual(Math.mod(nodeHeight * pointScaleFactor, 1.0), 1.0);
+    !floatsEqual((nodeHeight * pointScaleFactor) % 1.0, 0) &&
+    !floatsEqual((nodeHeight * pointScaleFactor) % 1.0, 1.0);
 
   node.layout.dimensions[Enums.DIMENSION_WIDTH] =
     roundValueToPixelGrid(
@@ -2375,6 +2434,27 @@ const roundToPixelGrid = (
   }
 };
 
+const isBaselineLayout = node => {
+  if (flexDirectionIsColumn(node.style.flexDirection)) {
+    return false;
+  }
+  if (node.style.alignItems == Enums.ALIGN_BASELINE) {
+    return true;
+  }
+  const childCount = node.getChildCount();
+  for (let i = 0; i < childCount; i++) {
+    const child = node.getChild(i);
+    if (
+      child.style.positionType == Enums.POSITION_TYPE_RELATIVE &&
+      child.style.alignSelf == Enums.ALIGN_BASELINE
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 class Node {
   static create() {
     return new Node();
@@ -2384,7 +2464,7 @@ class Node {
     return new Node();
   }
 
-  constructor(config = {}) {
+  constructor(config = { pointScaleFactor: 1 }) {
     this.config = config;
     this.style = new Style();
     this.layout = new Layout();
@@ -2403,11 +2483,8 @@ class Node {
 
     resolveDimensions(this);
 
-    let width;
-    let height;
-    let widthMeasureMode;
-    let heightMeasureMode;
-
+    let width = undefined;
+    let widthMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
     if (isStyleDimDefined(this, Enums.FLEX_DIRECTION_ROW, parentWidth)) {
       width =
         Value.resolve(
@@ -2419,7 +2496,7 @@ class Node {
       Value.resolve(
         this.style.maxDimensions[Enums.DIMENSION_WIDTH],
         parentWidth,
-      ) >= 0
+      ) >= 0.0
     ) {
       width = Value.resolve(
         this.style.maxDimensions[Enums.DIMENSION_WIDTH],
@@ -2428,11 +2505,13 @@ class Node {
       widthMeasureMode = Enums.MEASURE_MODE_AT_MOST;
     } else {
       width = parentWidth;
-      widthMeasureMode = !width
+      widthMeasureMode = floatIsUndefined(width)
         ? Enums.MEASURE_MODE_UNDEFINED
-        : Enums.MEASURE_MODE_EXACTLY; // TODO: isNil
+        : Enums.MEASURE_MODE_EXACTLY;
     }
 
+    let height = undefined;
+    let heightMeasureMode = Enums.MEASURE_MODE_UNDEFINED;
     if (isStyleDimDefined(this, Enums.FLEX_DIRECTION_COLUMN, parentHeight)) {
       height =
         Value.resolve(
@@ -2444,7 +2523,7 @@ class Node {
       Value.resolve(
         this.style.maxDimensions[Enums.DIMENSION_HEIGHT],
         parentHeight,
-      ) >= 0
+      ) >= 0.0
     ) {
       height = Value.resolve(
         this.style.maxDimensions[Enums.DIMENSION_HEIGHT],
@@ -2453,9 +2532,9 @@ class Node {
       heightMeasureMode = Enums.MEASURE_MODE_AT_MOST;
     } else {
       height = parentHeight;
-      heightMeasureMode = !height
+      heightMeasureMode = floatIsUndefined(height)
         ? Enums.MEASURE_MODE_UNDEFINED
-        : Enums.MEASURE_MODE_EXACTLY; // TODO: isNil
+        : Enums.MEASURE_MODE_EXACTLY;
     }
 
     if (
@@ -2477,10 +2556,10 @@ class Node {
         this,
         this.layout.direction,
         parentWidth,
-        parentWidth,
+        parentHeight,
         parentWidth,
       );
-      roundToPixelGrid(this, this.config.pointScaleFactor, 0, 0);
+      roundToPixelGrid(this, this.config.pointScaleFactor, 0.0, 0.0);
     }
   }
 

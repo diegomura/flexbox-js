@@ -11,7 +11,7 @@ const resolveDimensions = node => {
   for (let dim = Enums.DIMENSION_WIDTH; dim < Enums.DIMENSION_COUNT; dim++) {
     if (
       node.style.maxDimensions[dim].unit !== Enums.UNIT_UNDEFINED &&
-      Value.equals(node.style.maxDimensions[dim], node.style.minDimensions[dim])
+      Value.equal(node.style.maxDimensions[dim], node.style.minDimensions[dim])
     ) {
       node.resolvedDimensions[dim] = node.style.maxDimensions[dim];
     } else {
