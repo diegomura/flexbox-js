@@ -391,9 +391,10 @@ const layoutNodeInternal = (
   parentWidth,
   parentHeight,
   performLayout,
-  reason, //TODO: Check. Was * reason
+  reason,
   config,
 ) => {
+  debugger
   gDepth++;
 
   const needToVisitNode =
@@ -2372,7 +2373,6 @@ const roundToPixelGrid = (
   // lead to unwanted text truncation.
   const textRounding = node.nodeType === NODE_TYPE.TEXT;
 
-  debugger
   node.layout.position[Enums.EDGE_LEFT] = roundValueToPixelGrid(
     nodeLeft,
     pointScaleFactor,

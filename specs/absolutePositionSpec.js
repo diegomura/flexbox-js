@@ -180,6 +180,7 @@ describe('Absloute position', () => {
     child_child.setWidth(100);
     child_child.setHeight(100);
     child.insertChild(child_child, 0);
+
     root.calculateLayout(undefined, undefined, yoga.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -204,7 +205,7 @@ describe('Absloute position', () => {
     expect(root.getComputedLayout().width).toEqual(50);
     expect(root.getComputedLayout().height).toEqual(50);
 
-    expect(child.getComputedLayout().left).toEqual(50);
+    expect(child.getComputedLayout().left).toEqual(-50);
     expect(child.getComputedLayout().top).toEqual(0);
     expect(child.getComputedLayout().width).toEqual(100);
     expect(child.getComputedLayout().height).toEqual(100);

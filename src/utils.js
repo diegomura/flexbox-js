@@ -5,7 +5,7 @@ const floatsEqual = (a, b) => {
 };
 
 // ✅
-const floatIsUndefined = float => float === null || float === undefined;
+const floatIsUndefined = float => float === null || float === undefined || isNaN(float);
 
 // ✅
 const listCount = list => (list ? list.length : 0);
