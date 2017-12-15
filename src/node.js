@@ -119,6 +119,44 @@ const configIsExperimentalFeatureEnabled = (config, feature) => {
   return config.experimentalFeatures[feature];
 }
 
+const baseline = (node) => {
+  if (node.baseline !== null) {
+    return node.baseline(
+      node,
+      node.layout.measuredDimensions[Enums.DIMENSION_WIDTH],
+      node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT]
+    );
+  }
+
+  let baselineChild = null;
+  const childCount = node.getChildCount();
+
+  for (let i = 0; i < childCount; i++) {
+    const child = node.getChild(i);
+    if (child.lineIndex > 0) {
+      break;
+    }
+    if (child.style.positionType === Enums.POSITION_TYPE_ABSOLUTE) {
+      continue;
+    }
+    if (alignItem(node, child) === Enums.ALIGN_BASELINE) {
+      baselineChild = child;
+      break;
+    }
+
+    if (baselineChild === null) {
+      baselineChild = child;
+    }
+  }
+
+  if (baselineChild === null) {
+    return node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT];
+  }
+
+  return baseline(baselineChild) + baselineChild.layout.position[Enums.EDGE_TOP];
+}
+
+
 const constrainMaxSizeForMode = (
   node,
   axis,
