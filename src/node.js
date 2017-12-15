@@ -394,7 +394,6 @@ const layoutNodeInternal = (
   reason,
   config,
 ) => {
-  debugger
   gDepth++;
 
   const needToVisitNode =
@@ -2814,6 +2813,7 @@ class Node {
 
   setBorder(edge, border) {
     this.style.border[edge].value = border;
+    this.style.border[edge].unit = Enums.UNIT_POINT;
   }
 
   setDisplay(display) {

@@ -241,7 +241,6 @@ describe('Absloute position', () => {
     child.setPosition(yoga.EDGE_TOP, 0);
     child.setWidth(50);
     child.setHeight(50);
-
     root.insertChild(child, 0)
 
     const child2 = yoga.Node.create();
