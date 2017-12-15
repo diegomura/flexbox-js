@@ -1,6 +1,6 @@
 const flexbox = require('../src');
 
-describe('Aspect ratio', () => {
+describe.skip('Aspect ratio', () => {
   test('aspect_ratio_cross_defined', () => {
     const root = flexbox.Node.create();
 
