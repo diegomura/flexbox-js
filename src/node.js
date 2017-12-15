@@ -32,6 +32,7 @@ const {
   flexDirectionIsColumn,
   flexDirectionIsRow,
   resolveFlexGrow,
+  resolveFlexShrink,
   resolveFlexDirection,
   flexDirectionCross,
   isFlex,
@@ -114,6 +115,10 @@ const isLayoutDimDefined = (node, axis) => {
   return !floatIsUndefined(value) && value >= 0.0;
 }
 
+const configIsExperimentalFeatureEnabled = (config, feature) => {
+  return config.experimentalFeatures[feature];
+}
+
 const constrainMaxSizeForMode = (
   node,
   axis,
@@ -186,11 +191,7 @@ const computeFlexBasisForChild = (
   if (!floatIsUndefined(resolvedFlexBasis) && !floatIsUndefined(mainAxisSize)) {
     if (
       floatIsUndefined(child.layout.computedFlexBasis) ||
-      (configIsExperimentalFeatureEnabled(
-        child.config,
-        Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS,
-      ) &&
-        child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)
+      (configIsExperimentalFeatureEnabled(child.config, Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS) && child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)
     ) {
       child.layout.computedFlexBasis = max(
         resolvedFlexBasis,
@@ -370,7 +371,6 @@ const computeFlexBasisForChild = (
       'measure',
       config,
     );
-
     child.layout.computedFlexBasis = max(
       child.layout.measuredDimensions[dim[mainAxis]],
       paddingAndBorderForAxis(child, mainAxis, parentWidth),
@@ -2463,7 +2463,7 @@ class Node {
     return new Node();
   }
 
-  constructor(config = { pointScaleFactor: 1 }) {
+  constructor(config = { pointScaleFactor: 1, experimentalFeatures: [] }) {
     this.config = config;
     this.style = new Style();
     this.layout = new Layout();
@@ -2642,6 +2642,7 @@ class Node {
     }
 
     this.children.push(child);
+    child.parent = this;
   }
 
   isDirty() {
