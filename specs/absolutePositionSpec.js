@@ -609,7 +609,7 @@ describe('Absloute position', () => {
     expect(child.getComputedLayout().height).toEqual(40);
   });
 
-  test('absolute layoutalignitemsandjustifycontentcenterandleftposition', () => {
+  test('absolute layout align items and justify content center and left position', () => {
     const root = yoga.Node.create();
 
     root.setJustifyContent(yoga.JUSTIFY_CENTER);
