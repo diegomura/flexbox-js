@@ -1,7 +1,6 @@
 const Enums = require('./enums');
 const Value = require('./value');
 
-// ✅
 const computedEdgeValue = (edges, edge, defaultValue) => {
   if (edges[edge].unit !== Enums.UNIT_UNDEFINED) {
     return edges[edge];

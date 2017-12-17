@@ -58,7 +58,6 @@ let gDepth = 0;
 let gCurrentGenerationCount = 0;
 const YG_MAX_CACHED_RESULT_COUNT = 16;
 
-// ✅
 const resolveFlexBasisPtr = node => {
   if (
     node.style.flexBasis.unit !== Enums.UNIT_AUTO &&
@@ -72,7 +71,6 @@ const resolveFlexBasisPtr = node => {
   return Value.auto();
 };
 
-// ✅
 const alignItem = (node, child) => {
   const align =
     child.style.alignSelf === Enums.ALIGN_AUTO
@@ -87,7 +85,6 @@ const alignItem = (node, child) => {
   return align;
 };
 
-// ✅
 const marginLeadingValue = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -99,7 +96,6 @@ const marginLeadingValue = (node, axis) => {
   }
 };
 
-// ✅
 const marginTrailingValue = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -111,7 +107,6 @@ const marginTrailingValue = (node, axis) => {
   }
 };
 
-// ✅
 const dimWithMargin = (node, axis, widthSize) => {
   return (
     node.layout.measuredDimensions[dim[axis]] +
@@ -209,7 +204,6 @@ const constrainMaxSizeForMode = (
   return { mode, size };
 };
 
-// ✅
 const computeFlexBasisForChild = (
   node,
   child,
@@ -443,7 +437,6 @@ const computeFlexBasisForChild = (
   child.layout.computedFlexBasisGeneration = gCurrentGenerationCount;
 };
 
-// ✅
 const layoutNodeInternal = (
   node,
   availableWidth,
@@ -658,7 +651,6 @@ const baselineLayout = node => {
   return false;
 };
 
-// ✅
 const absoluteLayoutChild = (
   node,
   child,
@@ -2365,7 +2357,6 @@ const layoutImpl = (
   }
 };
 
-// ✅
 const markDirtyInternal = node => {
   if (!node.isDirty) {
     node.isDirty = true;
@@ -2404,7 +2395,6 @@ const roundValueToPixelGrid = (
   return scaledValue / pointScaleFactor;
 };
 
-// ✅
 const roundToPixelGrid = (
   node,
   pointScaleFactor,

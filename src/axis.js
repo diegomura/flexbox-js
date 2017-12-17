@@ -4,7 +4,6 @@ const { flexDirectionIsColumn, flexDirectionIsRow } = require('./flex');
 const { paddingAndBorderForAxis } = require('./paddings');
 const { floatIsUndefined } = require('./utils');
 
-// ✅
 const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   let min = undefined;
   let max = undefined;
@@ -42,7 +41,6 @@ const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   return boundValue;
 };
 
-// ✅
 const boundAxis = (node, axis, value, axisSize, widthSize) => {
   return Math.max(
     boundAxisWithinMinAndMax(node, axis, value, axisSize),

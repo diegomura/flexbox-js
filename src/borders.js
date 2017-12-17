@@ -4,7 +4,6 @@ const { flexDirectionIsRow } = require('./flex');
 const { computedEdgeValue } = require('./edges');
 const { leading, trailing } = require('./constants');
 
-// ✅
 const leadingBorder = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -20,7 +19,6 @@ const leadingBorder = (node, axis) => {
   );
 };
 
-// ✅
 const trailingBorder = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&

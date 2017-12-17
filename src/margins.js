@@ -4,19 +4,16 @@ const { computedEdgeValue } = require('./edges');
 const { flexDirectionIsRow } = require('./flex');
 const { leading, trailing } = require('./constants');
 
-// ✅
 const resolveValueMargin = (value, parentSize) => {
   return value.unit === Enums.UNIT_AUTO ? 0 : Value.resolve(value, parentSize);
 };
 
-// ✅
 const marginForAxis = (node, axis, widthSize) => {
   return (
     leadingMargin(node, axis, widthSize) + trailingMargin(node, axis, widthSize)
   );
 };
 
-// ✅
 const leadingMargin = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -31,7 +28,6 @@ const leadingMargin = (node, axis, widthSize) => {
   );
 };
 
-// ✅
 const trailingMargin = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&

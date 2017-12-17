@@ -5,7 +5,6 @@ const kDefaultFlexGrow = 0.0;
 const kDefaultFlexShrink = 0.0;
 const kWebDefaultFlexShrink = 1.0;
 
-// ✅
 const flexDirectionIsRow = flexDirection => {
   return (
     flexDirection === Enums.FLEX_DIRECTION_ROW ||
@@ -13,7 +12,6 @@ const flexDirectionIsRow = flexDirection => {
   );
 };
 
-// ✅
 const flexDirectionIsColumn = flexDirection => {
   return (
     flexDirection === Enums.FLEX_DIRECTION_COLUMN ||
@@ -21,14 +19,12 @@ const flexDirectionIsColumn = flexDirection => {
   );
 };
 
-// ✅
 const flexDirectionCross = (flexDirection, direction) => {
   return flexDirectionIsColumn(flexDirection)
     ? resolveFlexDirection(Enums.FLEX_DIRECTION_ROW, direction)
     : Enums.FLEX_DIRECTION_COLUMN;
 };
 
-// ✅
 const resolveFlexDirection = (flexDirection, direction) => {
   if (direction === Enums.DIRECTION_RTL) {
     if (flexDirection === Enums.FLEX_DIRECTION_ROW) {
@@ -41,7 +37,6 @@ const resolveFlexDirection = (flexDirection, direction) => {
   return flexDirection;
 };
 
-// ✅
 const resolveFlexGrow = node => {
   // Root nodes flexGrow should always be 0
   if (node.parent === null) {
@@ -56,14 +51,12 @@ const resolveFlexGrow = node => {
   return kDefaultFlexGrow;
 };
 
-// ✅
 const styleGetFlexGrow = node => {
   return floatIsUndefined(node.style.flexGrow)
     ? kDefaultFlexGrow
     : node.style.flexGrow;
 };
 
-// ✅
 const resolveFlexShrink = node => {
   // Root nodes flexShrink should always be 0
   if (node.parent === null) {
@@ -84,7 +77,6 @@ const resolveFlexShrink = node => {
     : kDefaultFlexShrink;
 };
 
-// ✅
 const isFlex = node => {
   return (
     node.style.positionType === Enums.POSITION_TYPE_RELATIVE &&

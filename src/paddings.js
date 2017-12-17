@@ -5,7 +5,6 @@ const { flexDirectionIsRow } = require('./flex');
 const { leadingBorder, trailingBorder } = require('./borders');
 const { leading, trailing } = require('./constants');
 
-// ✅
 const leadingPadding = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -24,7 +23,6 @@ const leadingPadding = (node, axis, widthSize) => {
   );
 };
 
-// ✅
 const trailingPadding = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
@@ -43,17 +41,14 @@ const trailingPadding = (node, axis, widthSize) => {
   );
 };
 
-// ✅
 const leadingPaddingAndBorder = (node, axis, widthSize) => {
   return leadingPadding(node, axis, widthSize) + leadingBorder(node, axis);
 };
 
-// ✅
 const trailingPaddingAndBorder = (node, axis, widthSize) => {
   return trailingPadding(node, axis, widthSize) + trailingBorder(node, axis);
 };
 
-// ✅
 const paddingAndBorderForAxis = (node, axis, widthSize) => {
   return (
     leadingPaddingAndBorder(node, axis, widthSize) +

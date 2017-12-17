@@ -6,7 +6,6 @@ const { paddingAndBorderForAxis } = require('./paddings');
 const { dim } = require('./constants');
 const { floatIsUndefined } = require('./utils');
 
-// ✅
 const resolveDimensions = node => {
   for (let dim = Enums.DIMENSION_WIDTH; dim < Enums.DIMENSION_COUNT; dim++) {
     if (
@@ -20,7 +19,6 @@ const resolveDimensions = node => {
   }
 };
 
-// ✅
 const isStyleDimDefined = (node, axis, parentSize) => {
   return !(
     node.resolvedDimensions[dim[axis]].unit === Enums.UNIT_AUTO ||
@@ -33,7 +31,6 @@ const isStyleDimDefined = (node, axis, parentSize) => {
   );
 };
 
-// ✅
 const emptyContainerSetMeasuredDimensions = (
   node,
   availableWidth,
@@ -86,7 +83,6 @@ const emptyContainerSetMeasuredDimensions = (
   );
 };
 
-// ✅
 const fixedSizeSetMeasuredDimensions = (
   node,
   availableWidth,

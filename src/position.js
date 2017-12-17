@@ -9,14 +9,12 @@ const { computedEdgeValue } = require('./edges');
 const { leadingMargin, trailingMargin } = require('./margins');
 const { dim, pos, leading, trailing } = require('./constants');
 
-// ✅
 const relativePosition = (node, axis, axisSize) => {
   return isLeadingPosDefined(node, axis)
     ? leadingPosition(node, axis, axisSize)
     : -trailingPosition(node, axis, axisSize);
 };
 
-// ✅
 const trailingPosition = (node, axis, axisSize) => {
   if (flexDirectionIsRow(axis)) {
     const trailingPosition = computedEdgeValue(
@@ -40,7 +38,6 @@ const trailingPosition = (node, axis, axisSize) => {
     : Value.resolve(trailingPosition, axisSize);
 };
 
-// ✅
 const setPosition = (node, direction, mainSize, crossSize, parentWidth) => {
   /* Root nodes should be always layouted as LTR, so we don't return negative values. */
   const directionRespectingRoot =
@@ -64,7 +61,6 @@ const setPosition = (node, direction, mainSize, crossSize, parentWidth) => {
     trailingMargin(node, crossAxis, parentWidth) + relativePositionCross;
 };
 
-// ✅
 const leadingPosition = (node, axis, axisSize) => {
   if (flexDirectionIsRow(axis)) {
     const leadingPosition = computedEdgeValue(
@@ -88,7 +84,6 @@ const leadingPosition = (node, axis, axisSize) => {
     : Value.resolve(leadingPosition, axisSize);
 };
 
-// ✅
 const isLeadingPosDefined = (node, axis) => {
   return (
     (flexDirectionIsRow(axis) &&
@@ -102,7 +97,6 @@ const isLeadingPosDefined = (node, axis) => {
   );
 };
 
-// ✅
 const isTrailingPosDefined = (node, axis) => {
   return (
     (flexDirectionIsRow(axis) &&
@@ -113,7 +107,6 @@ const isTrailingPosDefined = (node, axis) => {
   );
 };
 
-// ✅
 const setChildTrailingPosition = (node, child, axis) => {
   const size = child.layout.measuredDimensions[dim[axis]];
   child.layout.position[trailing[axis]] =
