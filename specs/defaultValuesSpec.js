@@ -20,25 +20,51 @@ describe('Default values', () => {
     expect(root.getFlexShrink()).toBe(0);
     expect(root.getFlexBasis().unit).toBe(flexbox.UNIT_AUTO);
 
-    expect(root.getPosition(flexbox.EDGE_LEFT).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPosition(flexbox.EDGE_TOP).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPosition(flexbox.EDGE_RIGHT).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPosition(flexbox.EDGE_BOTTOM).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPosition(flexbox.EDGE_START).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPosition(flexbox.EDGE_END).unit).toBe(flexbox.UNIT_UNDEFINED);
+    expect(root.getPosition(flexbox.EDGE_LEFT).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPosition(flexbox.EDGE_TOP).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPosition(flexbox.EDGE_RIGHT).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPosition(flexbox.EDGE_BOTTOM).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPosition(flexbox.EDGE_START).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPosition(flexbox.EDGE_END).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
 
     expect(root.getMargin(flexbox.EDGE_LEFT).unit).toBe(flexbox.UNIT_UNDEFINED);
     expect(root.getMargin(flexbox.EDGE_TOP).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getMargin(flexbox.EDGE_RIGHT).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getMargin(flexbox.EDGE_BOTTOM).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getMargin(flexbox.EDGE_START).unit).toBe(flexbox.UNIT_UNDEFINED);
+    expect(root.getMargin(flexbox.EDGE_RIGHT).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getMargin(flexbox.EDGE_BOTTOM).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getMargin(flexbox.EDGE_START).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
     expect(root.getMargin(flexbox.EDGE_END).unit).toBe(flexbox.UNIT_UNDEFINED);
 
-    expect(root.getPadding(flexbox.EDGE_LEFT).unit).toBe(flexbox.UNIT_UNDEFINED);
+    expect(root.getPadding(flexbox.EDGE_LEFT).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
     expect(root.getPadding(flexbox.EDGE_TOP).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPadding(flexbox.EDGE_RIGHT).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPadding(flexbox.EDGE_BOTTOM).unit).toBe(flexbox.UNIT_UNDEFINED);
-    expect(root.getPadding(flexbox.EDGE_START).unit).toBe(flexbox.UNIT_UNDEFINED);
+    expect(root.getPadding(flexbox.EDGE_RIGHT).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPadding(flexbox.EDGE_BOTTOM).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
+    expect(root.getPadding(flexbox.EDGE_START).unit).toBe(
+      flexbox.UNIT_UNDEFINED,
+    );
     expect(root.getPadding(flexbox.EDGE_END).unit).toBe(flexbox.UNIT_UNDEFINED);
 
     expect(root.getBorder(flexbox.EDGE_LEFT)).toBeFalsy();

@@ -2007,4 +2007,4 @@ describe('Align items', () => {
     expect(child3.getComputedLayout().width).toBe(0);
     expect(child3.getComputedLayout().height).toBe(0);
   });
-})
+});

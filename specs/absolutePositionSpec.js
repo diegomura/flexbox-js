@@ -15,7 +15,7 @@ describe('Absloute position', () => {
     child.setWidth(10);
     child.setHeight(10);
 
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -55,7 +55,7 @@ describe('Absloute position', () => {
     child.setWidth(10);
     child.setHeight(10);
 
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -94,7 +94,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_TOP, 10);
     child.setPosition(flexbox.EDGE_END, 10);
     child.setPosition(flexbox.EDGE_BOTTOM, 10);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -135,7 +135,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_BOTTOM, 10);
     child.setWidth(10);
     child.setHeight(10);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -174,7 +174,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setPosition(flexbox.EDGE_START, 0);
     child.setPosition(flexbox.EDGE_TOP, 0);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
 
     const child_child = flexbox.Node.create();
     child_child.setWidth(100);
@@ -241,7 +241,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_TOP, 0);
     child.setWidth(50);
     child.setHeight(50);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
 
     const child2 = flexbox.Node.create();
     child2.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
@@ -344,7 +344,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -384,7 +384,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -423,7 +423,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -462,7 +462,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -501,7 +501,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -542,7 +542,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_TOP, 10);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -583,7 +583,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_BOTTOM, 10);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -624,7 +624,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_LEFT, 5);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -665,7 +665,7 @@ describe('Absloute position', () => {
     child.setPosition(flexbox.EDGE_RIGHT, 5);
     child.setWidth(60);
     child.setHeight(40);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -724,7 +724,7 @@ describe('Absloute position', () => {
     child.setPositionPercent(flexbox.EDGE_TOP, 50);
     child.setWidth(10);
     child.setHeight(10);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
 
     const child2 = flexbox.Node.create();
     child2.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
@@ -796,7 +796,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(20);
     child.setHeight(20);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -835,7 +835,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(20);
     child.setHeight(20);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -874,7 +874,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(20);
     child.setHeight(20);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -914,7 +914,7 @@ describe('Absloute position', () => {
     child.setPositionType(flexbox.POSITION_TYPE_ABSOLUTE);
     child.setWidth(20);
     child.setHeight(20);
-    root.insertChild(child, 0)
+    root.insertChild(child, 0);
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().left).toEqual(0);
@@ -939,5 +939,4 @@ describe('Absloute position', () => {
     expect(child.getComputedLayout().width).toEqual(20);
     expect(child.getComputedLayout().height).toEqual(20);
   });
-
 });

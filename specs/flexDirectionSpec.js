@@ -59,8 +59,6 @@ describe('Flex direction', () => {
     expect(child2.getComputedLayout().top).toBe(20);
     expect(child2.getComputedLayout().width).toBe(100);
     expect(child2.getComputedLayout().height).toBe(10);
-
-
   });
 
   test('flex_direction_row_no_width', () => {
@@ -122,8 +120,6 @@ describe('Flex direction', () => {
     expect(child2.getComputedLayout().top).toBe(0);
     expect(child2.getComputedLayout().width).toBe(10);
     expect(child2.getComputedLayout().height).toBe(100);
-
-
   });
 
   test('flex_direction_column', () => {
@@ -371,7 +367,5 @@ describe('Flex direction', () => {
     expect(child2.getComputedLayout().top).toBe(0);
     expect(child2.getComputedLayout().width).toBe(10);
     expect(child2.getComputedLayout().height).toBe(100);
-
-
   });
 });

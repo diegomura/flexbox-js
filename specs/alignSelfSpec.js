@@ -1,6 +1,6 @@
 const flexbox = require('../src');
 
-describe('Align self', () =>{
+describe('Align self', () => {
   test('align_self_center', () => {
     const root = flexbox.Node.create();
 

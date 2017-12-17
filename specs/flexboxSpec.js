@@ -15,7 +15,9 @@ describe('Flexbox', () => {
   });
 
   test('Should have the same justifyContent by default', () => {
-    expect(yogaNode.getJustifyContent()).toEqual(flexboxNode.getJustifyContent());
+    expect(yogaNode.getJustifyContent()).toEqual(
+      flexboxNode.getJustifyContent(),
+    );
   });
 
   test('Should have the same alignContent by default', () => {
@@ -61,7 +63,9 @@ describe('Flexbox', () => {
     yogaNode.setJustifyContent(yoga.JUSTIFY_FLEX_END);
     flexboxNode.setJustifyContent(flexbox.JUSTIFY_FLEX_END);
 
-    expect(yogaNode.getJustifyContent()).toEqual(flexboxNode.getJustifyContent());
+    expect(yogaNode.getJustifyContent()).toEqual(
+      flexboxNode.getJustifyContent(),
+    );
   });
 
   test('Should setAlignContent', () => {

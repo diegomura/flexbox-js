@@ -2,7 +2,7 @@ const flexbox = require('../src');
 
 const baseline = (node, width, height) => {
   return node.getContext();
-}
+};
 
 describe.skip('Baseline function', () => {
   test('align_baseline_customer_func', () => {
