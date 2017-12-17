@@ -14,8 +14,8 @@ class Style {
     this.overflow = Enums.OVERFLOW_VISIBLE;
     this.display = Enums.DISPLAY_FLEX;
     this.flex = null;
-    this.flexGrow = 0;
-    this.flexShrink = 0;
+    this.flexGrow = null;
+    this.flexShrink = null;
     this.aspectRatio = null;
     this.flexBasis = new Value(Enums.UNIT_AUTO);
     this.margin = Value.defaultEdgeValues();

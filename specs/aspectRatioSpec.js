@@ -722,17 +722,18 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().Height).toBe(50);
   });
 
-  test('aspect_ratio_should_prefer_explicit_height', () => {
-    // YGConfigSetUseWebDefaults(config, true);
+  test('aspect ratio should prefer explicit height', () => {
+    const config = flexbox.Config.create();
+    config.setUseWebDefaults(true);
 
-    const root = flexbox.Node.create();
+    const root = flexbox.Node.create(config);
     root.setFlexDirection(flexbox.FLEX_DIRECTION_COLUMN);
 
-    const child1 = flexbox.Node.create();
+    const child1 = flexbox.Node.create(config);
     child1.setFlexDirection(flexbox.FLEX_DIRECTION_COLUMN);
     root.insertChild(child1, 0);
 
-    const child2 = flexbox.Node.create();
+    const child2 = flexbox.Node.create(config);
     child2.setFlexDirection(flexbox.FLEX_DIRECTION_COLUMN);
     child2.setHeight(100);
     child2.setAspectRatio(2);
@@ -750,15 +751,16 @@ describe.skip('Aspect ratio', () => {
     expect(child2.getComputedLayout().Height).toBe(100);
   });
 
-  test('aspect_ratio_should_prefer_explicit_width', () => {
-    // YGConfigSetUseWebDefaults(config, true);
+  test('aspect ratio should prefer explicit width', () => {
+    const config = flexbox.Config.create();
+    config.setUseWebDefaults(true);
 
-    const root = flexbox.Node.create();
+    const root = flexbox.Node.create(config);
 
-    const child1 = flexbox.Node.create();
+    const child1 = flexbox.Node.create(config);
     root.insertChild(child1, 0);
 
-    const child2 = flexbox.Node.create();
+    const child2 = flexbox.Node.create(config);
     child2.setWidth(100);
     child2.setAspectRatio(0.5);
     child1.insertChild(child2, 0);
@@ -776,17 +778,18 @@ describe.skip('Aspect ratio', () => {
   });
 
   test('aspect_ratio_should_prefer_flexed_dimension', () => {
-    // YGConfigSetUseWebDefaults(config, true);
+    const config = flexbox.Config.create();
+    config.setUseWebDefaults(true);
 
-    const root = flexbox.Node.create();
+    const root = flexbox.Node.create(config);
 
-    const child1 = flexbox.Node.create();
+    const child1 = flexbox.Node.create(config);
     child1.setFlexDirection(flexbox.FLEX_DIRECTION_COLUMN);
     child1.setAspectRatio(2);
     child1.setFlexGrow(1);
     root.insertChild(child1, 0);
 
-    const child2 = flexbox.Node.create();
+    const child2 = flexbox.Node.create(config);
     child2.setAspectRatio(4);
     child2.setFlexGrow(1);
     child1.insertChild(child2, 0);

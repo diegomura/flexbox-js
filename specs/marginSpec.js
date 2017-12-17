@@ -169,8 +169,6 @@ describe('Margins', () => {
     root.setHeight(100);
     root.setMarginPercent(yoga.EDGE_START, 10);
     root.calculateLayout(100, 100, yoga.DIRECTION_LTR);
-
-    console.log(root.getComputedMargin(yoga.EDGE_RIGHT));
   });
 
   test('should set end percent margin', () => {

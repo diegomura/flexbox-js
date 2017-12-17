@@ -100,4 +100,7 @@ module.exports = {
   resolveFlexGrow,
   resolveFlexShrink,
   isFlex,
+  kDefaultFlexGrow,
+  kDefaultFlexShrink,
+  kWebDefaultFlexShrink
 };

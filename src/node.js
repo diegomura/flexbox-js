@@ -1,6 +1,7 @@
 const Layout = require('./layout');
 const Style = require('./style');
 const Value = require('./value');
+const Config = require('./config');
 const Enums = require('./enums');
 const { floatsEqual, floatIsUndefined, listCount, max, min } = require('./utils');
 const { marginForAxis, leadingMargin, trailingMargin } = require('./margins');
@@ -36,6 +37,9 @@ const {
   resolveFlexDirection,
   flexDirectionCross,
   isFlex,
+  kWebDefaultFlexShrink,
+  kDefaultFlexShrink,
+  kDefaultFlexGrow,
 } = require('./flex');
 const { trailing, leading, dim, pos } = require('./constants');
 
@@ -2493,16 +2497,23 @@ const isBaselineLayout = node => {
 };
 
 class Node {
-  static create() {
-    return new Node();
+  static create(config =  new Config()) {
+    const node = new Node(config);
+
+    if (config.useWebDefaults) {
+      node.style.flexDirection = Enums.FLEX_DIRECTION_ROW
+      node.style.alignContent = Enums.ALIGN_STRETCH;
+    }
+
+    return node;
   }
 
   static createDefault() {
     return new Node();
   }
 
-  constructor(config = { pointScaleFactor: 1, experimentalFeatures: [] }) {
-    this.config = config;
+  constructor(config) {
+    this.config = config || new Config();
     this.style = new Style();
     this.layout = new Layout();
     this.parent = null;
@@ -2607,7 +2618,7 @@ class Node {
   freeRecursive() {}
 
   getChild(index) {
-    return this.children[index];
+    return this.children[index] || null;
   }
 
   getChildCount() {
@@ -2703,7 +2714,7 @@ class Node {
   }
 
   reset() {
-    if (this.getChildCount() === 0) {
+    if (this.getChildCount() !== 0) {
       console.log('Cannot reset a node which still has children attached');
       return;
     }
@@ -2763,6 +2774,10 @@ class Node {
     return this.style.display;
   }
 
+  getDirection() {
+    return this.style.direction;
+  }
+
   getFlexBasis() {
     return this.style.flexBasis;
   }
@@ -2772,12 +2787,15 @@ class Node {
   }
 
   getFlexGrow() {
-    return this.style.flexGrow;
+    return floatIsUndefined(this.style.flexGrow)
+      ? kDefaultFlexGrow
+      : this.style.flexGrow;
   }
 
   getFlexShrink() {
-    //TODO: Check for config.useWebDefaults as real code
-    return this.style.flexShrink;
+    return floatIsUndefined(this.style.flexShrink)
+      ? (this.config.useWebDefaults ? kWebDefaultFlexShrink : kDefaultFlexShrink)
+      : this.style.flexShrink;
   }
 
   getFlexWrap() {
