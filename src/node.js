@@ -160,6 +160,15 @@ const baseline = (node) => {
   return baseline(baselineChild) + baselineChild.layout.position[Enums.EDGE_TOP];
 }
 
+const zeroOutLayoutRecursivly = node => {
+  node.hasNewLayout = true;
+
+  const childCount = node.getChildCount(node);
+  for (let i = 0; i < childCount; i++) {
+    const child = node.getChild(i);
+    zeroOutLayoutRecursivly(child);
+  }
+}
 
 const constrainMaxSizeForMode = (
   node,
