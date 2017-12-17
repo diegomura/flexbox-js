@@ -14,5 +14,5 @@ module.exports = Object.assign(
     Layout: layout,
     Config: config,
   },
-  enums
+  enums,
 );

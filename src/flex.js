@@ -102,5 +102,5 @@ module.exports = {
   isFlex,
   kDefaultFlexGrow,
   kDefaultFlexShrink,
-  kWebDefaultFlexShrink
+  kWebDefaultFlexShrink,
 };

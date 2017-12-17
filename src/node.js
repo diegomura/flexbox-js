@@ -3,7 +3,13 @@ const Style = require('./style');
 const Value = require('./value');
 const Config = require('./config');
 const Enums = require('./enums');
-const { floatsEqual, floatIsUndefined, listCount, max, min } = require('./utils');
+const {
+  floatsEqual,
+  floatIsUndefined,
+  listCount,
+  max,
+  min,
+} = require('./utils');
 const { marginForAxis, leadingMargin, trailingMargin } = require('./margins');
 const { leadingBorder, trailingBorder } = require('./borders');
 const {
@@ -117,18 +123,18 @@ const dimWithMargin = (node, axis, widthSize) => {
 const isLayoutDimDefined = (node, axis) => {
   const value = node.layout.measuredDimensions[dim[axis]];
   return !floatIsUndefined(value) && value >= 0.0;
-}
+};
 
 const configIsExperimentalFeatureEnabled = (config, feature) => {
   return config.experimentalFeatures[feature];
-}
+};
 
-const baseline = (node) => {
+const baseline = node => {
   if (node.baseline !== null) {
     return node.baseline(
       node,
       node.layout.measuredDimensions[Enums.DIMENSION_WIDTH],
-      node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT]
+      node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT],
     );
   }
 
@@ -157,8 +163,10 @@ const baseline = (node) => {
     return node.layout.measuredDimensions[Enums.DIMENSION_HEIGHT];
   }
 
-  return baseline(baselineChild) + baselineChild.layout.position[Enums.EDGE_TOP];
-}
+  return (
+    baseline(baselineChild) + baselineChild.layout.position[Enums.EDGE_TOP]
+  );
+};
 
 const zeroOutLayoutRecursivly = node => {
   node.hasNewLayout = true;
@@ -168,7 +176,7 @@ const zeroOutLayoutRecursivly = node => {
     const child = node.getChild(i);
     zeroOutLayoutRecursivly(child);
   }
-}
+};
 
 const constrainMaxSizeForMode = (
   node,
@@ -242,7 +250,11 @@ const computeFlexBasisForChild = (
   if (!floatIsUndefined(resolvedFlexBasis) && !floatIsUndefined(mainAxisSize)) {
     if (
       floatIsUndefined(child.layout.computedFlexBasis) ||
-      (configIsExperimentalFeatureEnabled(child.config, Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS) && child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)
+      (configIsExperimentalFeatureEnabled(
+        child.config,
+        Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS,
+      ) &&
+        child.layout.computedFlexBasisGeneration !== gCurrentGenerationCount)
     ) {
       child.layout.computedFlexBasis = max(
         resolvedFlexBasis,
@@ -1736,8 +1748,7 @@ const layoutImpl = (
           break;
         case Enums.JUSTIFY_SPACE_BETWEEN:
           if (itemsOnLine > 1) {
-            betweenMainDim =
-              max(remainingFreeSpace, 0) / (itemsOnLine - 1);
+            betweenMainDim = max(remainingFreeSpace, 0) / (itemsOnLine - 1);
           } else {
             betweenMainDim = 0;
           }
@@ -2100,10 +2111,7 @@ const layoutImpl = (
               ) -
               ascent;
             maxAscentForCurrentLine = max(maxAscentForCurrentLine, ascent);
-            maxDescentForCurrentLine = max(
-              maxDescentForCurrentLine,
-              descent,
-            );
+            maxDescentForCurrentLine = max(maxDescentForCurrentLine, descent);
             lineHeight = max(
               lineHeight,
               maxAscentForCurrentLine + maxDescentForCurrentLine,
@@ -2506,11 +2514,11 @@ const isBaselineLayout = node => {
 };
 
 class Node {
-  static create(config =  new Config()) {
+  static create(config = new Config()) {
     const node = new Node(config);
 
     if (config.useWebDefaults) {
-      node.style.flexDirection = Enums.FLEX_DIRECTION_ROW
+      node.style.flexDirection = Enums.FLEX_DIRECTION_ROW;
       node.style.alignContent = Enums.ALIGN_STRETCH;
     }
 
@@ -2803,7 +2811,7 @@ class Node {
 
   getFlexShrink() {
     return floatIsUndefined(this.style.flexShrink)
-      ? (this.config.useWebDefaults ? kWebDefaultFlexShrink : kDefaultFlexShrink)
+      ? this.config.useWebDefaults ? kWebDefaultFlexShrink : kDefaultFlexShrink
       : this.style.flexShrink;
   }
 

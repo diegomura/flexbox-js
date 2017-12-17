@@ -5,7 +5,7 @@ class Config {
     return new Config();
   }
 
-  constructor () {
+  constructor() {
     this.pointScaleFactor = 1;
     this.experimentalFeatures = {
       [Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS]: false,

@@ -48,14 +48,31 @@ class Layout {
     this.generationCount = 0;
     this.lastParentDirection = this.direction - 1;
     this.nextCachedMeasurementsIndex = 0;
-    this.cachedMeasurements = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
+    this.cachedMeasurements = [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+    ];
     this.cachedLayout = {
       availableWidth: 0,
       availableHeight: 0,
       widthMeasureMode: -1,
       heightMeasureMode: -1,
       computedWidth: -1,
-      computedHeight: -1
+      computedHeight: -1,
     };
     this.width = null;
     this.height = null;
