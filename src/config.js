@@ -8,6 +8,7 @@ class Config {
   constructor() {
     this.pointScaleFactor = 1;
     this.experimentalFeatures = {
+      [Enums.EXPERIMENTAL_FEATURE_COUNT]: false,
       [Enums.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS]: false,
     };
     this.useWebDefaults = false;
@@ -16,6 +17,10 @@ class Config {
 
   setUseWebDefaults(value) {
     this.useWebDefaults = value;
+  }
+
+  setExperimentalFeatureEnabled(feature, value) {
+    this.experimentalFeatures[feature] = value;
   }
 }
 
