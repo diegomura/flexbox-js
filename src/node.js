@@ -47,7 +47,7 @@ const {
   kDefaultFlexShrink,
   kDefaultFlexGrow,
 } = require('./flex');
-const { trailing, leading, dim, pos } = require('./constants');
+const { trailing, leading, dim, pos, MAX_CACHED_RESULT_COUNT } = require('./constants');
 
 const NODE_TYPE = {
   DEFAULT: 'default',
@@ -56,7 +56,6 @@ const NODE_TYPE = {
 
 let gDepth = 0;
 let gCurrentGenerationCount = 0;
-const YG_MAX_CACHED_RESULT_COUNT = 16;
 
 const resolveFlexBasisPtr = node => {
   if (
@@ -164,6 +163,7 @@ const baseline = node => {
 };
 
 const zeroOutLayoutRecursivly = node => {
+  node.layout.reset();
   node.hasNewLayout = true;
 
   const childCount = node.getChildCount(node);
@@ -577,7 +577,7 @@ const layoutNodeInternal = (
 
     if (cachedResults === null) {
       if (
-        node.layout.nextCachedMeasurementsIndex === YG_MAX_CACHED_RESULT_COUNT
+        node.layout.nextCachedMeasurementsIndex === MAX_CACHED_RESULT_COUNT
       ) {
         node.layout.nextCachedMeasurementsIndex = 0;
       }

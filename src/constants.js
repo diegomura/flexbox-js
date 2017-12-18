@@ -1,5 +1,7 @@
 const Enums = require('./enums');
 
+const MAX_CACHED_RESULT_COUNT = 16;
+
 const leading = {
   [Enums.FLEX_DIRECTION_COLUMN]: Enums.EDGE_TOP,
   [Enums.FLEX_DIRECTION_COLUMN_REVERSE]: Enums.EDGE_BOTTOM,
@@ -29,6 +31,7 @@ const pos = {
 };
 
 module.exports = {
+  MAX_CACHED_RESULT_COUNT,
   leading,
   trailing,
   dim,

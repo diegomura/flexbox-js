@@ -1,86 +1,60 @@
 const Enums = require('./enums');
 const Value = require('./value');
+const { MAX_CACHED_RESULT_COUNT } = require('./constants');
+
+const arrayOf = (value, size) => {
+  return new Array(size).fill(null).map(() => {
+    if (value instanceof Function) {
+      return value();
+    }
+    return value;
+  });
+};
+
+const cachedMeasurement = () => ({
+  availableWidth: 0,
+  availableHeight: 0,
+  widthMeasureMode: -1,
+  heightMeasureMode: -1,
+  computedWidth: -1,
+  computedHeight: -1,
+});
+
+const defaultLayout = () => ({
+  position: arrayOf(0, 4),
+  margin: arrayOf(0, 6),
+  padding: arrayOf(0, 6),
+  border: arrayOf(0, 6),
+  dimensions: arrayOf(NaN, 2),
+  measuredDimensions: arrayOf(NaN, 2),
+  direction: Enums.DIRECTION_INHERIT,
+  computedFlexBasisGeneration: 0,
+  computedFlexBasis: undefined,
+  hadOverflow: false,
+  generationCount: 0,
+  lastParentDirection: -1,
+  nextCachedMeasurementsIndex: 0,
+  cachedMeasurements: arrayOf(cachedMeasurement, MAX_CACHED_RESULT_COUNT),
+  cachedLayout: cachedMeasurement(),
+});
 
 class Layout {
   constructor() {
-    this.position = {
-      [0]: 0,
-      [1]: 0,
-      [2]: 0,
-      [3]: 0,
-    };
-    this.margin = {
-      [0]: 0,
-      [1]: 0,
-      [2]: 0,
-      [3]: 0,
-      [4]: 0,
-      [5]: 0,
-    };
-    this.padding = {
-      [0]: 0,
-      [1]: 0,
-      [2]: 0,
-      [3]: 0,
-      [4]: 0,
-      [5]: 0,
-    };
-    this.border = {
-      [0]: 0,
-      [1]: 0,
-      [2]: 0,
-      [3]: 0,
-      [4]: 0,
-      [5]: 0,
-    };
-    this.dimensions = {
-      [0]: NaN,
-      [1]: NaN,
-    };
-    this.measuredDimensions = {
-      [0]: NaN,
-      [1]: NaN,
-    };
-    this.direction = Enums.DIRECTION_INHERIT;
-    this.computedFlexBasisGeneration = 0;
-    this.computedFlexBasis;
-    this.hadOverflow = false;
-    this.generationCount = 0;
-    this.lastParentDirection = this.direction - 1;
-    this.nextCachedMeasurementsIndex = 0;
-    this.cachedMeasurements = [
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-    ];
-    this.cachedLayout = {
-      availableWidth: 0,
-      availableHeight: 0,
-      widthMeasureMode: -1,
-      heightMeasureMode: -1,
-      computedWidth: -1,
-      computedHeight: -1,
-    };
-    this.width = null;
-    this.height = null;
+    this.initDefaultValues();
   }
 
-  fromJS() {}
+  initDefaultValues() {
+    const values = defaultLayout();
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        this[key] = values[key];
+      }
+    }
+  }
 
-  toString() {}
+  reset() {
+    this.initDefaultValues();
+  }
 }
 
 module.exports = Layout;
