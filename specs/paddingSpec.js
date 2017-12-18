@@ -216,4 +216,215 @@ describe('Paddings', () => {
       flexboxNode.getPadding(flexbox.EDGE_END),
     );
   });
+
+  test('padding_no_size', () => {
+    const root = flexbox.Node.create()
+    root.setPadding(flexbox.EDGE_LEFT, 10);
+    root.setPadding(flexbox.EDGE_TOP, 10);
+    root.setPadding(flexbox.EDGE_RIGHT, 10);
+    root.setPadding(flexbox.EDGE_BOTTOM, 10);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(20);
+    expect(root.getComputedLayout().height).toBe(20);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(20);
+    expect(root.getComputedLayout().height).toBe(20);
+  });
+
+  test('padding_container_match_child', () => {
+    const root = flexbox.Node.create()
+    root.setPadding(flexbox.EDGE_LEFT, 10);
+    root.setPadding(flexbox.EDGE_TOP, 10);
+    root.setPadding(flexbox.EDGE_RIGHT, 10);
+    root.setPadding(flexbox.EDGE_BOTTOM, 10);
+
+    const root_child0 = flexbox.Node.create()
+    root_child0.setWidth(10);
+    root_child0.setHeight(10);
+    root.insertChild(root_child0, 0);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(30);
+    expect(root.getComputedLayout().height).toBe(30);
+
+    expect(root_child0.getComputedLayout().left).toBe(10);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(30);
+    expect(root.getComputedLayout().height).toBe(30);
+
+    expect(root_child0.getComputedLayout().left).toBe(10);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+  });
+
+  test('padding_flex_child', () => {
+    const root = flexbox.Node.create()
+    root.setPadding(flexbox.EDGE_LEFT, 10);
+    root.setPadding(flexbox.EDGE_TOP, 10);
+    root.setPadding(flexbox.EDGE_RIGHT, 10);
+    root.setPadding(flexbox.EDGE_BOTTOM, 10);
+    root.setWidth(100);
+    root.setHeight(100);
+
+    const root_child0 = flexbox.Node.create()
+    root_child0.setFlexGrow(1);
+    root_child0.setWidth(10);
+    root.insertChild(root_child0, 0);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(10);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(80);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(80);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(80);
+  });
+
+  test('padding_stretch_child', () => {
+    const root = flexbox.Node.create()
+    root.setPadding(flexbox.EDGE_LEFT, 10);
+    root.setPadding(flexbox.EDGE_TOP, 10);
+    root.setPadding(flexbox.EDGE_RIGHT, 10);
+    root.setPadding(flexbox.EDGE_BOTTOM, 10);
+    root.setWidth(100);
+    root.setHeight(100);
+
+    const root_child0 = flexbox.Node.create()
+    root_child0.setHeight(10);
+    root.insertChild(root_child0, 0);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(10);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(80);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(10);
+    expect(root_child0.getComputedLayout().top).toBe(10);
+    expect(root_child0.getComputedLayout().width).toBe(80);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+  });
+
+  test('padding_center_child', () => {
+    const root = flexbox.Node.create()
+    root.setJustifyContent(flexbox.JUSTIFY_CENTER);
+    root.setAlignItems(flexbox.ALIGN_CENTER);
+    root.setPadding(flexbox.EDGE_START, 10);
+    root.setPadding(flexbox.EDGE_END, 20);
+    root.setPadding(flexbox.EDGE_BOTTOM, 20);
+    root.setWidth(100);
+    root.setHeight(100);
+
+    const root_child0 = flexbox.Node.create()
+    root_child0.setWidth(10);
+    root_child0.setHeight(10);
+    root.insertChild(root_child0, 0);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(40);
+    expect(root_child0.getComputedLayout().top).toBe(35);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
+
+    expect(root_child0.getComputedLayout().left).toBe(50);
+    expect(root_child0.getComputedLayout().top).toBe(35);
+    expect(root_child0.getComputedLayout().width).toBe(10);
+    expect(root_child0.getComputedLayout().height).toBe(10);
+  });
+
+  test('child_with_padding_align_end', () => {
+    const root = flexbox.Node.create()
+    root.setJustifyContent(flexbox.JUSTIFY_FLEX_END);
+    root.setAlignItems(flexbox.ALIGN_FLEX_END);
+    root.setWidth(200);
+    root.setHeight(200);
+
+    const root_child0 = flexbox.Node.create()
+    root_child0.setPadding(flexbox.EDGE_LEFT, 20);
+    root_child0.setPadding(flexbox.EDGE_TOP, 20);
+    root_child0.setPadding(flexbox.EDGE_RIGHT, 20);
+    root_child0.setPadding(flexbox.EDGE_BOTTOM, 20);
+    root_child0.setWidth(100);
+    root_child0.setHeight(100);
+    root.insertChild(root_child0, 0);
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(200);
+    expect(root.getComputedLayout().height).toBe(200);
+
+    expect(root_child0.getComputedLayout().left).toBe(100);
+    expect(root_child0.getComputedLayout().top).toBe(100);
+    expect(root_child0.getComputedLayout().width).toBe(100);
+    expect(root_child0.getComputedLayout().height).toBe(100);
+
+    root.calculateLayout(undefined, undefined, flexbox.DIRECTION_RTL);
+
+    expect(root.getComputedLayout().left).toBe(0);
+    expect(root.getComputedLayout().top).toBe(0);
+    expect(root.getComputedLayout().width).toBe(200);
+    expect(root.getComputedLayout().height).toBe(200);
+
+    expect(root_child0.getComputedLayout().left).toBe(0);
+    expect(root_child0.getComputedLayout().top).toBe(100);
+    expect(root_child0.getComputedLayout().width).toBe(100);
+    expect(root_child0.getComputedLayout().height).toBe(100);
+  });
 });
