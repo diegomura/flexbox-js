@@ -1,31 +1,31 @@
-const Enums = require('./enums');
-const { floatIsUndefined } = require('./utils');
+import Enums from './enums';
+import { floatIsUndefined } from './utils';
 
-const kDefaultFlexGrow = 0.0;
-const kDefaultFlexShrink = 0.0;
-const kWebDefaultFlexShrink = 1.0;
+export const kDefaultFlexGrow = 0.0;
+export const kDefaultFlexShrink = 0.0;
+export const kWebDefaultFlexShrink = 1.0;
 
-const flexDirectionIsRow = flexDirection => {
+export const flexDirectionIsRow = flexDirection => {
   return (
     flexDirection === Enums.FLEX_DIRECTION_ROW ||
     flexDirection === Enums.FLEX_DIRECTION_ROW_REVERSE
   );
 };
 
-const flexDirectionIsColumn = flexDirection => {
+export const flexDirectionIsColumn = flexDirection => {
   return (
     flexDirection === Enums.FLEX_DIRECTION_COLUMN ||
     flexDirection === Enums.FLEX_DIRECTION_COLUMN_REVERSE
   );
 };
 
-const flexDirectionCross = (flexDirection, direction) => {
+export const flexDirectionCross = (flexDirection, direction) => {
   return flexDirectionIsColumn(flexDirection)
     ? resolveFlexDirection(Enums.FLEX_DIRECTION_ROW, direction)
     : Enums.FLEX_DIRECTION_COLUMN;
 };
 
-const resolveFlexDirection = (flexDirection, direction) => {
+export const resolveFlexDirection = (flexDirection, direction) => {
   if (direction === Enums.DIRECTION_RTL) {
     if (flexDirection === Enums.FLEX_DIRECTION_ROW) {
       return Enums.FLEX_DIRECTION_ROW_REVERSE;
@@ -37,7 +37,7 @@ const resolveFlexDirection = (flexDirection, direction) => {
   return flexDirection;
 };
 
-const resolveFlexGrow = node => {
+export const resolveFlexGrow = node => {
   // Root nodes flexGrow should always be 0
   if (node.parent === null) {
     return 0.0;
@@ -51,13 +51,13 @@ const resolveFlexGrow = node => {
   return kDefaultFlexGrow;
 };
 
-const styleGetFlexGrow = node => {
+export const styleGetFlexGrow = node => {
   return floatIsUndefined(node.style.flexGrow)
     ? kDefaultFlexGrow
     : node.style.flexGrow;
 };
 
-const resolveFlexShrink = node => {
+export const resolveFlexShrink = node => {
   // Root nodes flexShrink should always be 0
   if (node.parent === null) {
     return 0.0;
@@ -77,14 +77,14 @@ const resolveFlexShrink = node => {
     : kDefaultFlexShrink;
 };
 
-const isFlex = node => {
+export const isFlex = node => {
   return (
     node.style.positionType === Enums.POSITION_TYPE_RELATIVE &&
     (resolveFlexGrow(node) !== 0 || resolveFlexShrink(node) !== 0)
   );
 };
 
-module.exports = {
+export default {
   flexDirectionIsRow,
   flexDirectionIsColumn,
   flexDirectionCross,

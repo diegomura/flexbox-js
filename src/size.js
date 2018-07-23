@@ -9,4 +9,4 @@ class Size {
   toString() {}
 }
 
-module.exports = Size;
+export default Size;

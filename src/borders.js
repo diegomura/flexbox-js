@@ -1,10 +1,10 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { flexDirectionIsRow } = require('./flex');
-const { computedEdgeValue } = require('./edges');
-const { leading, trailing } = require('./constants');
+import Enums from './enums';
+import Value from './value';
+import { flexDirectionIsRow } from './flex';
+import { computedEdgeValue } from './edges';
+import { leading, trailing } from './constants';
 
-const leadingBorder = (node, axis) => {
+export const leadingBorder = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.border[Enums.EDGE_START].unit !== Enums.UNIT_UNDEFINED &&
@@ -19,7 +19,7 @@ const leadingBorder = (node, axis) => {
   );
 };
 
-const trailingBorder = (node, axis) => {
+export const trailingBorder = (node, axis) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.border[Enums.EDGE_END].unit != Enums.UNIT_UNDEFINED &&
@@ -34,7 +34,7 @@ const trailingBorder = (node, axis) => {
   );
 };
 
-module.exports = {
+export default {
   leadingBorder,
   trailingBorder,
 };

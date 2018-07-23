@@ -1,12 +1,12 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { boundAxis } = require('./axis');
-const { marginForAxis } = require('./margins');
-const { paddingAndBorderForAxis } = require('./paddings');
-const { dim } = require('./constants');
-const { floatIsUndefined } = require('./utils');
+import Enums from './enums';
+import Value from './value';
+import { boundAxis } from './axis';
+import { marginForAxis } from './margins';
+import { paddingAndBorderForAxis } from './paddings';
+import { dim } from './constants';
+import { floatIsUndefined } from './utils';
 
-const resolveDimensions = node => {
+export const resolveDimensions = node => {
   for (let dim = Enums.DIMENSION_WIDTH; dim < Enums.DIMENSION_COUNT; dim++) {
     if (
       node.style.maxDimensions[dim].unit !== Enums.UNIT_UNDEFINED &&
@@ -19,7 +19,7 @@ const resolveDimensions = node => {
   }
 };
 
-const isStyleDimDefined = (node, axis, parentSize) => {
+export const isStyleDimDefined = (node, axis, parentSize) => {
   return !(
     node.resolvedDimensions[dim[axis]].unit === Enums.UNIT_AUTO ||
     node.resolvedDimensions[dim[axis]].unit === Enums.UNIT_UNDEFINED ||
@@ -31,7 +31,7 @@ const isStyleDimDefined = (node, axis, parentSize) => {
   );
 };
 
-const emptyContainerSetMeasuredDimensions = (
+export const emptyContainerSetMeasuredDimensions = (
   node,
   availableWidth,
   availableHeight,
@@ -83,7 +83,7 @@ const emptyContainerSetMeasuredDimensions = (
   );
 };
 
-const fixedSizeSetMeasuredDimensions = (
+export const fixedSizeSetMeasuredDimensions = (
   node,
   availableWidth,
   availableHeight,
@@ -140,7 +140,7 @@ const fixedSizeSetMeasuredDimensions = (
   return false;
 };
 
-module.exports = {
+export default {
   resolveDimensions,
   isStyleDimDefined,
   emptyContainerSetMeasuredDimensions,

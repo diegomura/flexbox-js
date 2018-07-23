@@ -1,6 +1,6 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { MAX_CACHED_RESULT_COUNT } = require('./constants');
+import Enums from './enums';
+import Value from './value';
+import { MAX_CACHED_RESULT_COUNT } from './constants';
 
 const arrayOf = (value, size) => {
   return new Array(size).fill(null).map(() => {
@@ -57,4 +57,4 @@ class Layout {
   }
 }
 
-module.exports = Layout;
+export default Layout;

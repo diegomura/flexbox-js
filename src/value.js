@@ -1,4 +1,4 @@
-const Enums = require('./enums');
+import Enums from './enums';
 
 class Value {
   static zero() {
@@ -67,4 +67,4 @@ class Value {
   toString() {}
 }
 
-module.exports = Value;
+export default Value;

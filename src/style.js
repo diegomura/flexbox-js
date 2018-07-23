@@ -1,5 +1,5 @@
-const Enums = require('./enums');
-const Value = require('./value');
+import Enums from './enums';
+import Value from './value';
 
 const defaultStyle = () => ({
   direction: Enums.DIRECTION_INHERIT,
@@ -45,4 +45,4 @@ class Style {
   }
 }
 
-module.exports = Style;
+export default Style;

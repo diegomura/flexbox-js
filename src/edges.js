@@ -1,7 +1,7 @@
-const Enums = require('./enums');
-const Value = require('./value');
+import Enums from './enums';
+import Value from './value';
 
-const computedEdgeValue = (edges, edge, defaultValue) => {
+export const computedEdgeValue = (edges, edge, defaultValue) => {
   if (edges[edge].unit !== Enums.UNIT_UNDEFINED) {
     return edges[edge];
   }
@@ -34,6 +34,6 @@ const computedEdgeValue = (edges, edge, defaultValue) => {
   return defaultValue;
 };
 
-module.exports = {
+export default {
   computedEdgeValue,
 };

@@ -1,10 +1,10 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { flexDirectionIsColumn, flexDirectionIsRow } = require('./flex');
-const { paddingAndBorderForAxis } = require('./paddings');
-const { floatIsUndefined } = require('./utils');
+import Enums from './enums';
+import Value from './value';
+import { flexDirectionIsColumn, flexDirectionIsRow } from './flex';
+import { paddingAndBorderForAxis } from './paddings';
+import { floatIsUndefined } from './utils';
 
-const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
+export const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   let min = undefined;
   let max = undefined;
 
@@ -41,14 +41,14 @@ const boundAxisWithinMinAndMax = (node, axis, value, axisSize) => {
   return boundValue;
 };
 
-const boundAxis = (node, axis, value, axisSize, widthSize) => {
+export const boundAxis = (node, axis, value, axisSize, widthSize) => {
   return Math.max(
     boundAxisWithinMinAndMax(node, axis, value, axisSize),
     paddingAndBorderForAxis(node, axis, widthSize),
   );
 };
 
-module.exports = {
+export default {
   boundAxisWithinMinAndMax,
   boundAxis,
 };

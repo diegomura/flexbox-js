@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   ALIGN_COUNT: 8,
   ALIGN_AUTO: 0,
   ALIGN_FLEX_START: 1,

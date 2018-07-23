@@ -1,36 +1,36 @@
-const Enums = require('./enums');
+import Enums from './enums';
 
-const MAX_CACHED_RESULT_COUNT = 16;
+export const MAX_CACHED_RESULT_COUNT = 16;
 
-const leading = {
+export const leading = {
   [Enums.FLEX_DIRECTION_COLUMN]: Enums.EDGE_TOP,
   [Enums.FLEX_DIRECTION_COLUMN_REVERSE]: Enums.EDGE_BOTTOM,
   [Enums.FLEX_DIRECTION_ROW]: Enums.EDGE_LEFT,
   [Enums.FLEX_DIRECTION_ROW_REVERSE]: Enums.EDGE_RIGHT,
 };
 
-const trailing = {
+export const trailing = {
   [Enums.FLEX_DIRECTION_COLUMN]: Enums.EDGE_BOTTOM,
   [Enums.FLEX_DIRECTION_COLUMN_REVERSE]: Enums.EDGE_TOP,
   [Enums.FLEX_DIRECTION_ROW]: Enums.EDGE_RIGHT,
   [Enums.FLEX_DIRECTION_ROW_REVERSE]: Enums.EDGE_LEFT,
 };
 
-const dim = {
+export const dim = {
   [Enums.FLEX_DIRECTION_COLUMN]: Enums.DIMENSION_HEIGHT,
   [Enums.FLEX_DIRECTION_COLUMN_REVERSE]: Enums.DIMENSION_HEIGHT,
   [Enums.FLEX_DIRECTION_ROW]: Enums.DIMENSION_WIDTH,
   [Enums.FLEX_DIRECTION_ROW_REVERSE]: Enums.DIMENSION_WIDTH,
 };
 
-const pos = {
+export const pos = {
   [Enums.FLEX_DIRECTION_COLUMN]: Enums.EDGE_TOP,
   [Enums.FLEX_DIRECTION_COLUMN_REVERSE]: Enums.EDGE_BOTTOM,
   [Enums.FLEX_DIRECTION_ROW]: Enums.EDGE_LEFT,
   [Enums.FLEX_DIRECTION_ROW_REVERSE]: Enums.EDGE_RIGHT,
 };
 
-module.exports = {
+export default {
   MAX_CACHED_RESULT_COUNT,
   leading,
   trailing,

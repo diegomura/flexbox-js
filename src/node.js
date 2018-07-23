@@ -1,41 +1,41 @@
-const Layout = require('./layout');
-const Style = require('./style');
-const Value = require('./value');
-const Config = require('./config');
-const Enums = require('./enums');
-const {
+import Layout from './layout';
+import Style from './style';
+import Value from './value';
+import Config from './config';
+import Enums from './enums';
+import {
   floatsEqual,
   floatIsUndefined,
   listCount,
   max,
   min,
-} = require('./utils');
-const { marginForAxis, leadingMargin, trailingMargin } = require('./margins');
-const { leadingBorder, trailingBorder } = require('./borders');
-const {
+} from './utils';
+import { marginForAxis, leadingMargin, trailingMargin } from './margins';
+import { leadingBorder, trailingBorder } from './borders';
+import {
   leadingPadding,
   trailingPadding,
   leadingPaddingAndBorder,
   trailingPaddingAndBorder,
   paddingAndBorderForAxis,
-} = require('./paddings');
-const {
+} from './paddings';
+import {
   setPosition,
   isLeadingPosDefined,
   leadingPosition,
   trailingPosition,
   isTrailingPosDefined,
   setChildTrailingPosition,
-} = require('./position');
-const { boundAxis } = require('./axis');
-const { computedEdgeValue } = require('./edges');
-const {
+} from './position';
+import { boundAxis } from './axis';
+import { computedEdgeValue } from './edges';
+import {
   resolveDimensions,
   isStyleDimDefined,
   emptyContainerSetMeasuredDimensions,
   fixedSizeSetMeasuredDimensions,
-} = require('./dimensions');
-const {
+} from './dimensions';
+import {
   flexDirectionIsColumn,
   flexDirectionIsRow,
   resolveFlexGrow,
@@ -46,8 +46,8 @@ const {
   kWebDefaultFlexShrink,
   kDefaultFlexShrink,
   kDefaultFlexGrow,
-} = require('./flex');
-const { trailing, leading, dim, pos, MAX_CACHED_RESULT_COUNT } = require('./constants');
+} from './flex';
+import { trailing, leading, dim, pos, MAX_CACHED_RESULT_COUNT } from './constants';
 
 const NODE_TYPE = {
   DEFAULT: 'default',
@@ -3031,4 +3031,4 @@ class Node {
   }
 }
 
-module.exports = Node;
+export default Node;

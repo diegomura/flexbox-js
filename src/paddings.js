@@ -1,11 +1,11 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { computedEdgeValue } = require('./edges');
-const { flexDirectionIsRow } = require('./flex');
-const { leadingBorder, trailingBorder } = require('./borders');
-const { leading, trailing } = require('./constants');
+import Enums from './enums';
+import Value from './value';
+import { computedEdgeValue } from './edges';
+import { flexDirectionIsRow } from './flex';
+import { leadingBorder, trailingBorder } from './borders';
+import { leading, trailing } from './constants';
 
-const leadingPadding = (node, axis, widthSize) => {
+export const leadingPadding = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.padding[Enums.EDGE_START].unit !== Enums.UNIT_UNDEFINED &&
@@ -23,7 +23,7 @@ const leadingPadding = (node, axis, widthSize) => {
   );
 };
 
-const trailingPadding = (node, axis, widthSize) => {
+export const trailingPadding = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.padding[Enums.EDGE_END].unit !== Enums.UNIT_UNDEFINED &&
@@ -41,22 +41,22 @@ const trailingPadding = (node, axis, widthSize) => {
   );
 };
 
-const leadingPaddingAndBorder = (node, axis, widthSize) => {
+export const leadingPaddingAndBorder = (node, axis, widthSize) => {
   return leadingPadding(node, axis, widthSize) + leadingBorder(node, axis);
 };
 
-const trailingPaddingAndBorder = (node, axis, widthSize) => {
+export const trailingPaddingAndBorder = (node, axis, widthSize) => {
   return trailingPadding(node, axis, widthSize) + trailingBorder(node, axis);
 };
 
-const paddingAndBorderForAxis = (node, axis, widthSize) => {
+export const paddingAndBorderForAxis = (node, axis, widthSize) => {
   return (
     leadingPaddingAndBorder(node, axis, widthSize) +
     trailingPaddingAndBorder(node, axis, widthSize)
   );
 };
 
-module.exports = {
+export default {
   leadingPadding,
   trailingPadding,
   leadingPaddingAndBorder,

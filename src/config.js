@@ -1,4 +1,4 @@
-const Enums = require('./enums');
+import Enums from './enums';
 
 class Config {
   static create() {
@@ -24,4 +24,4 @@ class Config {
   }
 }
 
-module.exports = Config;
+export default Config;

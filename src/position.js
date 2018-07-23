@@ -1,13 +1,13 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const {
+import Enums from './enums';
+import Value from './value';
+import {
   flexDirectionIsRow,
   flexDirectionCross,
   resolveFlexDirection,
-} = require('./flex');
-const { computedEdgeValue } = require('./edges');
-const { leadingMargin, trailingMargin } = require('./margins');
-const { dim, pos, leading, trailing } = require('./constants');
+} from './flex';
+import { computedEdgeValue } from './edges';
+import { leadingMargin, trailingMargin } from './margins';
+import { dim, pos, leading, trailing } from './constants';
 
 const relativePosition = (node, axis, axisSize) => {
   return isLeadingPosDefined(node, axis)
@@ -15,7 +15,7 @@ const relativePosition = (node, axis, axisSize) => {
     : -trailingPosition(node, axis, axisSize);
 };
 
-const trailingPosition = (node, axis, axisSize) => {
+export const trailingPosition = (node, axis, axisSize) => {
   if (flexDirectionIsRow(axis)) {
     const trailingPosition = computedEdgeValue(
       node.style.position,
@@ -38,7 +38,7 @@ const trailingPosition = (node, axis, axisSize) => {
     : Value.resolve(trailingPosition, axisSize);
 };
 
-const setPosition = (node, direction, mainSize, crossSize, parentWidth) => {
+export const setPosition = (node, direction, mainSize, crossSize, parentWidth) => {
   /* Root nodes should be always layouted as LTR, so we don't return negative values. */
   const directionRespectingRoot =
     node.parent !== null ? direction : Enums.DIRECTION_LTR;
@@ -61,7 +61,7 @@ const setPosition = (node, direction, mainSize, crossSize, parentWidth) => {
     trailingMargin(node, crossAxis, parentWidth) + relativePositionCross;
 };
 
-const leadingPosition = (node, axis, axisSize) => {
+export const leadingPosition = (node, axis, axisSize) => {
   if (flexDirectionIsRow(axis)) {
     const leadingPosition = computedEdgeValue(
       node.style.position,
@@ -84,7 +84,7 @@ const leadingPosition = (node, axis, axisSize) => {
     : Value.resolve(leadingPosition, axisSize);
 };
 
-const isLeadingPosDefined = (node, axis) => {
+export const isLeadingPosDefined = (node, axis) => {
   return (
     (flexDirectionIsRow(axis) &&
       computedEdgeValue(
@@ -97,7 +97,7 @@ const isLeadingPosDefined = (node, axis) => {
   );
 };
 
-const isTrailingPosDefined = (node, axis) => {
+export const isTrailingPosDefined = (node, axis) => {
   return (
     (flexDirectionIsRow(axis) &&
       computedEdgeValue(node.style.position, Enums.EDGE_END, Value.undefined())
@@ -107,7 +107,7 @@ const isTrailingPosDefined = (node, axis) => {
   );
 };
 
-const setChildTrailingPosition = (node, child, axis) => {
+export const setChildTrailingPosition = (node, child, axis) => {
   const size = child.layout.measuredDimensions[dim[axis]];
   child.layout.position[trailing[axis]] =
     node.layout.measuredDimensions[dim[axis]] -
@@ -115,7 +115,7 @@ const setChildTrailingPosition = (node, child, axis) => {
     child.layout.position[pos[axis]];
 };
 
-module.exports = {
+export default {
   setPosition,
   leadingPosition,
   trailingPosition,

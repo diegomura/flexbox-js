@@ -1,20 +1,20 @@
-const Enums = require('./enums');
-const Value = require('./value');
-const { computedEdgeValue } = require('./edges');
-const { flexDirectionIsRow } = require('./flex');
-const { leading, trailing } = require('./constants');
+import Enums from './enums';
+import Value from './value';
+import { computedEdgeValue } from './edges';
+import { flexDirectionIsRow } from './flex';
+import { leading, trailing } from './constants';
 
 const resolveValueMargin = (value, parentSize) => {
   return value.unit === Enums.UNIT_AUTO ? 0 : Value.resolve(value, parentSize);
 };
 
-const marginForAxis = (node, axis, widthSize) => {
+export const marginForAxis = (node, axis, widthSize) => {
   return (
     leadingMargin(node, axis, widthSize) + trailingMargin(node, axis, widthSize)
   );
 };
 
-const leadingMargin = (node, axis, widthSize) => {
+export const leadingMargin = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.margin[Enums.EDGE_START].unit !== Enums.UNIT_UNDEFINED
@@ -28,7 +28,7 @@ const leadingMargin = (node, axis, widthSize) => {
   );
 };
 
-const trailingMargin = (node, axis, widthSize) => {
+export const trailingMargin = (node, axis, widthSize) => {
   if (
     flexDirectionIsRow(axis) &&
     node.style.margin[Enums.EDGE_END].unit !== Enums.UNIT_UNDEFINED
@@ -42,7 +42,7 @@ const trailingMargin = (node, axis, widthSize) => {
   );
 };
 
-module.exports = {
+export default {
   marginForAxis,
   leadingMargin,
   trailingMargin,

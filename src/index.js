@@ -1,11 +1,11 @@
-var node = require('./node');
-var size = require('./size');
-var value = require('./value');
-var layout = require('./layout');
-var config = require('./config');
-var enums = require('./enums');
+import node from './node';
+import size from './size';
+import value from './value';
+import layout from './layout';
+import config from './config';
+import enums from './enums';
 
-module.exports = Object.assign(
+export default Object.assign(
   {},
   {
     Node: node,
