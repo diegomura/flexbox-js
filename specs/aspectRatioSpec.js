@@ -1,6 +1,13 @@
 const flexbox = require('../src');
 
-describe.skip('Aspect ratio', () => {
+describe('Aspect ratio', () => {
+  const measure = (node, width, widthMode, height, heightMode) => {
+    return {
+        width: widthMode === flexboxMEASURE_MODE_EXACTLY ? width : 50,
+        height: heightMode === flexboxMEASURE_MODE_EXACTLY ? height : 50,
+    };
+  };
+
   test('aspect_ratio_cross_defined', () => {
     const root = flexbox.Node.create();
 
@@ -18,7 +25,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_main_defined', () => {
@@ -38,7 +45,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_both_dimensions_defined_row', () => {
@@ -59,7 +66,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_both_dimensions_defined_column', () => {
@@ -80,7 +87,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_align_stretch', () => {
@@ -98,7 +105,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_flex_grow', () => {
@@ -119,7 +126,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_flex_shrink', () => {
@@ -140,7 +147,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_flex_shrink_2', () => {
@@ -166,12 +173,12 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
 
     expect(child2.getComputedLayout().left).toBe(0);
     expect(child2.getComputedLayout().top).toBe(50);
     expect(child2.getComputedLayout().width).toBe(50);
-    expect(child2.getComputedLayout().Height).toBe(50);
+    expect(child2.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_basis', () => {
@@ -191,7 +198,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_absolute_layout_width_defined', () => {
@@ -213,7 +220,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_absolute_layout_height_defined', () => {
@@ -235,7 +242,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_with_max_cross_defined', () => {
@@ -256,7 +263,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(40);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_with_max_main_defined', () => {
@@ -277,7 +284,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(40);
-    expect(child1.getComputedLayout().Height).toBe(40);
+    expect(child1.getComputedLayout().height).toBe(40);
   });
 
   test('aspect_ratio_with_min_cross_defined', () => {
@@ -298,7 +305,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(40);
-    expect(child1.getComputedLayout().Height).toBe(30);
+    expect(child1.getComputedLayout().height).toBe(30);
   });
 
   test('aspect_ratio_with_min_main_defined', () => {
@@ -319,7 +326,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(40);
-    expect(child1.getComputedLayout().Height).toBe(40);
+    expect(child1.getComputedLayout().height).toBe(40);
   });
 
   test('aspect_ratio_double_cross', () => {
@@ -339,7 +346,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_half_cross', () => {
@@ -359,7 +366,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_double_main', () => {
@@ -379,7 +386,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_half_main', () => {
@@ -399,7 +406,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_with_measure_func', () => {
@@ -419,7 +426,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_width_height_flex_grow_row', () => {
@@ -441,7 +448,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_width_height_flex_grow_column', () => {
@@ -463,7 +470,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_height_as_flex_basis', () => {
@@ -490,12 +497,12 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(75);
-    expect(child1.getComputedLayout().Height).toBe(75);
+    expect(child1.getComputedLayout().height).toBe(75);
 
     expect(child2.getComputedLayout().left).toBe(75);
     expect(child2.getComputedLayout().top).toBe(0);
     expect(child2.getComputedLayout().width).toBe(125);
-    expect(child2.getComputedLayout().Height).toBe(125);
+    expect(child2.getComputedLayout().height).toBe(125);
   });
 
   test('aspect_ratio_width_as_flex_basis', () => {
@@ -522,12 +529,12 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(75);
-    expect(child1.getComputedLayout().Height).toBe(75);
+    expect(child1.getComputedLayout().height).toBe(75);
 
     expect(child2.getComputedLayout().left).toBe(0);
     expect(child2.getComputedLayout().top).toBe(75);
     expect(child2.getComputedLayout().width).toBe(125);
-    expect(child2.getComputedLayout().Height).toBe(125);
+    expect(child2.getComputedLayout().height).toBe(125);
   });
 
   test('aspect_ratio_overrides_flex_grow_row', () => {
@@ -548,7 +555,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(200);
+    expect(child1.getComputedLayout().height).toBe(200);
   });
 
   test('aspect_ratio_overrides_flex_grow_column', () => {
@@ -569,7 +576,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(200);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
   });
 
   test('aspect_ratio_left_right_absolute', () => {
@@ -591,7 +598,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(10);
     expect(child1.getComputedLayout().top).toBe(10);
     expect(child1.getComputedLayout().width).toBe(80);
-    expect(child1.getComputedLayout().Height).toBe(80);
+    expect(child1.getComputedLayout().height).toBe(80);
   });
 
   test('aspect_ratio_top_bottom_absolute', () => {
@@ -613,7 +620,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(10);
     expect(child1.getComputedLayout().top).toBe(10);
     expect(child1.getComputedLayout().width).toBe(80);
-    expect(child1.getComputedLayout().Height).toBe(80);
+    expect(child1.getComputedLayout().height).toBe(80);
   });
 
   test('aspect_ratio_width_overrides_align_stretch_row', () => {
@@ -632,7 +639,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_height_overrides_align_stretch_column', () => {
@@ -651,7 +658,7 @@ describe.skip('Aspect ratio', () => {
     expect(child1.getComputedLayout().left).toBe(0);
     expect(child1.getComputedLayout().top).toBe(0);
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_allow_child_overflow_parent_size', () => {
@@ -668,10 +675,10 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(100);
-    expect(root.getComputedLayout().Height).toBe(50);
+    expect(root.getComputedLayout().height).toBe(50);
 
     expect(child1.getComputedLayout().width).toBe(200);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_defined_main_with_margin', () => {
@@ -692,10 +699,10 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(100);
-    expect(root.getComputedLayout().Height).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
 
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect_ratio_defined_cross_with_margin', () => {
@@ -716,10 +723,10 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(undefined, undefined, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(100);
-    expect(root.getComputedLayout().Height).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
 
     expect(child1.getComputedLayout().width).toBe(50);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
   });
 
   test('aspect ratio should prefer explicit height', () => {
@@ -742,13 +749,13 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(100, 200, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(100);
-    expect(root.getComputedLayout().Height).toBe(200);
+    expect(root.getComputedLayout().height).toBe(200);
 
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
 
     expect(child2.getComputedLayout().width).toBe(200);
-    expect(child2.getComputedLayout().Height).toBe(100);
+    expect(child2.getComputedLayout().height).toBe(100);
   });
 
   test('aspect ratio should prefer explicit width', () => {
@@ -768,13 +775,13 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(200, 100, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(200);
-    expect(root.getComputedLayout().Height).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
 
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(100);
+    expect(child1.getComputedLayout().height).toBe(100);
 
     expect(child2.getComputedLayout().width).toBe(100);
-    expect(child2.getComputedLayout().Height).toBe(200);
+    expect(child2.getComputedLayout().height).toBe(200);
   });
 
   test('aspect_ratio_should_prefer_flexed_dimension', () => {
@@ -797,12 +804,12 @@ describe.skip('Aspect ratio', () => {
     root.calculateLayout(100, 100, flexbox.DIRECTION_LTR);
 
     expect(root.getComputedLayout().width).toBe(100);
-    expect(root.getComputedLayout().Height).toBe(100);
+    expect(root.getComputedLayout().height).toBe(100);
 
     expect(child1.getComputedLayout().width).toBe(100);
-    expect(child1.getComputedLayout().Height).toBe(50);
+    expect(child1.getComputedLayout().height).toBe(50);
 
     expect(child2.getComputedLayout().width).toBe(200);
-    expect(child2.getComputedLayout().Height).toBe(50);
+    expect(child2.getComputedLayout().height).toBe(50);
   });
 });
